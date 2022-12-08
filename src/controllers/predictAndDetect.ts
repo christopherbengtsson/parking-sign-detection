@@ -1,25 +1,6 @@
 import { Request, Response } from 'express';
 import { DEFAULT_THRESHOLD } from '../config';
-import { Worker } from 'worker_threads';
-import path from 'path';
-import logger from '../logger';
-
-const worker = new Worker(path.join(__dirname + '/predict'));
-
-const predictionService = (image: Express.Multer.File, threshold: number) => {
-  return new Promise((resolve, reject) => {
-    worker.once('message', (msg) => {
-      logger.debug('response received from worker');
-      resolve(msg);
-    });
-    worker.on('error', (err) => {
-      logger.error('Worker threw an error', err);
-      reject(err);
-    });
-
-    worker.postMessage({ image, threshold });
-  });
-};
+import { runWorkerTask } from '../service/worker';
 
 const fakePromise = () => {
   return new Promise<void>((resolve) => {
@@ -51,7 +32,7 @@ export const predictAndDetect = async (
   // detectText(image)
   // workerPool.run(image)
 
-  Promise.all([predictionService(image, threshold), fakePromise()])
+  Promise.all([runWorkerTask(image, threshold), fakePromise()])
     .then((res) => {
       const signsResult = res[0];
       // const textResult = res[1];

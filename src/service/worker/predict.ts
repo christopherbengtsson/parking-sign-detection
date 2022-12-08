@@ -1,26 +1,20 @@
 import * as tf from '@tensorflow/tfjs-node';
-import { logPerformance } from '../utils/logPerformanceTime';
-import { postProcessPredictions } from '../service/tensorflow/postprocess';
-import { parentPort, isMainThread } from 'worker_threads';
-import TensorflowModelClass from '../service/tensorflow/model';
-import logger from '../logger';
+import { logPerformance } from '../../utils/logPerformanceTime';
+import { postProcessPredictions } from './postprocess';
+import { parentPort } from 'node:worker_threads';
+import { loadModel } from '../tensorflow/model';
 
 let model: tf.GraphModel<string>;
 
-if (!isMainThread) {
-  const modelInstance = TensorflowModelClass.getInstance();
-  modelInstance.loadModel().then(() => {
-    model = modelInstance.getModel();
-    logger.info('Model loaded in worker');
-  });
+loadModel().then((loadedModel) => {
+  model = loadedModel;
+  parentPort?.postMessage({ loaded: true });
+});
 
-  parentPort?.on('message', async ({ image, threshold }) => {
-    const predictions = await predictLocal({ image, threshold });
-    parentPort?.postMessage(predictions);
-  });
-} else {
-  logger.warning('Worker code available in main thread');
-}
+parentPort?.on('message', async ({ image, threshold }) => {
+  const predictions = await predictLocal({ image, threshold });
+  parentPort?.postMessage(predictions);
+});
 
 const predictLocal = async ({
   image,

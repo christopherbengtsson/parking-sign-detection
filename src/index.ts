@@ -1,6 +1,7 @@
 import service from './main/service';
 import { DEFAULT_HOST, DEFAULT_PORT } from './config';
 import logger from './logger';
+import { initWorker } from './service/worker';
 
 function startServer() {
   const HOST = process.env.HOST || DEFAULT_HOST;
@@ -13,4 +14,10 @@ function startServer() {
   server.keepAliveTimeout = 61 * 1000;
 }
 
-startServer();
+initWorker()
+  .then(() => {
+    startServer();
+  })
+  .catch((err) => {
+    logger.error('Failed to start server', err);
+  });

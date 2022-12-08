@@ -1,7 +1,7 @@
 import { cpus } from 'os';
 
 export const DEFAULT_HOST = 'http://localhost';
-export const DEFAULT_PORT = 3008;
+export const DEFAULT_PORT = 8080;
 
 export const CORES = cpus().length / 2;
 

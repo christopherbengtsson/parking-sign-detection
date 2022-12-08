@@ -1,6 +1,6 @@
 import { logPerformance } from '../../utils/logPerformanceTime';
 import { BoundingBox, IResult } from '../types';
-import { getClassLabels } from './utils';
+import { getClassLabels } from '../tensorflow/utils';
 
 export const postProcessPredictions = (
   predictions: (number[] | number[][])[],

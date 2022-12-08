@@ -3,7 +3,7 @@ config:
   processor: 'processor.js'
   phases:
     - duration: 30 # for 30 sec
-      arrivalRate: 10 # generate 10 virtual users every second
+      arrivalRate: 20 # generate 10 virtual users every second
       # maxVusers: 5 # max concurrent virtual users
 
 scenarios:
