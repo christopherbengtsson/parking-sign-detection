@@ -1,7 +1,7 @@
 import service from './main/service';
 import { DEFAULT_HOST, DEFAULT_PORT } from './config';
 import logger from './logger';
-import { initWorker } from './service/worker';
+import { initWorker } from './service/prediction-worker';
 
 function startServer() {
   const HOST = process.env.HOST || DEFAULT_HOST;

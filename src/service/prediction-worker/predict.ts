@@ -3,6 +3,7 @@ import { logPerformance } from '../../utils/logPerformanceTime';
 import { postProcessPredictions } from './postprocess';
 import { parentPort } from 'node:worker_threads';
 import { loadModel } from '../tensorflow/model';
+import { IImageSize } from '../../types';
 
 let model: tf.GraphModel<string>;
 
@@ -25,7 +26,7 @@ const predictLocal = async ({
 }) => {
   const t1 = performance.now();
 
-  const originalImageSize = {
+  const originalImageSize: IImageSize = {
     width: 0,
     height: 0,
   };
@@ -72,6 +73,7 @@ const predictLocal = async ({
 
     return {
       mappedPredictions,
+      originalImageSize,
     };
   } catch (err) {
     throw err;

@@ -1,10 +1,11 @@
 import { logPerformance } from '../../utils/logPerformanceTime';
 import { BoundingBox, IResult } from '../types';
 import { getClassLabels } from '../tensorflow/utils';
+import { IImageSize } from '../../types';
 
 export const postProcessPredictions = (
   predictions: (number[] | number[][])[],
-  imageSize: { width: number; height: number },
+  imageSize: IImageSize,
   threshold: number,
 ) => {
   const t1 = performance.now();

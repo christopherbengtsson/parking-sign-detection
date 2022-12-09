@@ -1,11 +1,13 @@
 import { Request, Response } from 'express';
 import { DEFAULT_THRESHOLD } from '../config';
-import { runWorkerTask } from '../service/worker';
+import { runWorkerTask } from '../service/prediction-worker';
+import { mapTextToSign } from '../service/textMapper/textMapper';
+import { mockText } from '../mocks/text';
 
 const fakePromise = () => {
-  return new Promise<void>((resolve) => {
+  return new Promise((resolve) => {
     setTimeout(() => {
-      resolve();
+      resolve(mockText);
     }, 200);
   });
 };
@@ -14,13 +16,6 @@ export const predictAndDetect = async (
   request: Request,
   response: Response,
 ) => {
-  // const model = TensorflowModel.getInstance()?.getModel();
-
-  // if (!model) {
-  //   response.status(503).send('Server not ready, try again later');
-  //   return;
-  // }
-
   const image = request.file as Express.Multer.File;
 
   let threshold = Number(request.body.threshold);
@@ -28,23 +23,20 @@ export const predictAndDetect = async (
     threshold = Number(DEFAULT_THRESHOLD);
   }
 
-  // predictLocal({ model, image, threshold })
   // detectText(image)
-  // workerPool.run(image)
-
   Promise.all([runWorkerTask(image, threshold), fakePromise()])
     .then((res) => {
-      const signsResult = res[0];
-      // const textResult = res[1];
+      const { mappedPredictions, originalImageSize } = res[0];
+      const textPredictions = res[1];
 
-      // const t1 = performance.now();
-      // const result = mapTextToSign(signsResult, textResult);
-      // const t2 = performance.now();
-      // logPerformance(t1, t2, 'to run `mapTextToSign()`');
+      const result = mapTextToSign(
+        mappedPredictions,
+        textPredictions,
+        originalImageSize,
+      );
 
       response.json({
-        signsResult,
-        // textResult,
+        result,
       });
     })
     .catch((err) => {
