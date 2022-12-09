@@ -1,16 +1,10 @@
 import { Request, Response } from 'express';
-import { DEFAULT_THRESHOLD } from '../config';
+import { DEFAULT_THRESHOLD, IS_DEV } from '../config';
+import { mockDetectText } from '../mocks/mocks';
 import { runWorkerTask } from '../service/prediction-worker';
 import { mapTextToSign } from '../service/textMapper/textMapper';
-import { mockText } from '../mocks/text';
-
-const fakePromise = () => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(mockText);
-    }, 200);
-  });
-};
+import { detectText } from './detectText';
+import logger from '../logger';
 
 export const predictAndDetect = async (
   request: Request,
@@ -23,8 +17,9 @@ export const predictAndDetect = async (
     threshold = Number(DEFAULT_THRESHOLD);
   }
 
-  // detectText(image)
-  Promise.all([runWorkerTask(image, threshold), fakePromise()])
+  const textDetectionPromise = IS_DEV ? mockDetectText() : detectText(image);
+
+  Promise.all([runWorkerTask(image, threshold), textDetectionPromise])
     .then((res) => {
       const { mappedPredictions, originalImageSize } = res[0];
       const textPredictions = res[1];
@@ -40,7 +35,7 @@ export const predictAndDetect = async (
       });
     })
     .catch((err) => {
-      console.error(err);
+      logger.error(err);
       response.status(500).send(err);
     });
 };

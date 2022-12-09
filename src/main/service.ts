@@ -15,7 +15,7 @@ if (process.env.NODE_ENV === 'development') {
 app.use('/api', SignDetectionRouter);
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
-  console.error(err?.message ?? 'Unknown server error', err, {
+  logger.error(err?.message ?? 'Unknown server error', err, {
     originalUrl: req.originalUrl,
   });
   logger.error('Unknown server error', err);

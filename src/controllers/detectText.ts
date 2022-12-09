@@ -1,5 +1,6 @@
 import fetch from 'node-fetch';
 import logger from '../logger';
+import { IOcr } from '../types';
 
 const ocpApimKey = process.env.OCP_APIM_SUBSCRIPTION_KEY;
 const requestUrl =
@@ -11,7 +12,7 @@ export const detectText = async (image: Express.Multer.File) => {
     throw new Error('Could not find `Ocp-Apim-Subscription-Key`!');
   }
 
-  const response = await fetch(requestUrl, {
+  const response: IOcr = await fetch(requestUrl, {
     method: 'post',
     headers: {
       'Ocp-Apim-Subscription-Key': ocpApimKey,

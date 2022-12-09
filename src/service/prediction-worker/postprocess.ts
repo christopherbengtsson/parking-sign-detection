@@ -1,7 +1,6 @@
 import { logPerformance } from '../../utils/logPerformanceTime';
-import { BoundingBox, IResult } from '../types';
 import { getClassLabels } from '../tensorflow/utils';
-import { IImageSize } from '../../types';
+import { IBoundingBoxes, IImageSize, ISign } from '../../types';
 
 export const postProcessPredictions = (
   predictions: (number[] | number[][])[],
@@ -46,7 +45,7 @@ export const postProcessPredictions = (
     }
 
     return previous;
-  }, [] as IResult[]);
+  }, [] as ISign[]);
 
   const t2 = performance.now();
   logPerformance(t1, t2, 'to run `postProcessPredictions()`');
@@ -69,14 +68,14 @@ const normalizeBoundingBoxes = (
     top: bboxTop,
     width: bboxWidth,
     height: bboxHeight,
-  } as BoundingBox;
+  } as IBoundingBoxes;
 };
 
 const checkIfSignIsNested = (
-  signs: IResult[],
-  currentSign: IResult,
-  signBoundingBoxes: BoundingBox,
-) => {
+  signs: ISign[],
+  currentSign: ISign,
+  signBoundingBoxes: IBoundingBoxes,
+): ISign[] | false => {
   let currentSignIsNested = false;
   if (signs.length) {
     signs.every((previousSign, index) => {
@@ -91,10 +90,7 @@ const checkIfSignIsNested = (
         top + height <=
           previousSignBoundingBoxes.top + previousSignBoundingBoxes.height
       ) {
-        signs[index].nestedSigns = [
-          ...(signs[index].nestedSigns ?? []),
-          currentSign,
-        ];
+        signs[index].nestedSign = currentSign;
 
         currentSignIsNested = true;
         return false; // Break loop, a sign can (?) only be nested in one sign

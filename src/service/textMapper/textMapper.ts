@@ -1,16 +1,17 @@
+import { IImageSize, IOcr, ISign } from '../../types';
 import { logPerformance } from '../../utils/logPerformanceTime';
 
 export const mapTextToSign = (
-  mappedPredictions,
-  textPredictions,
-  originalImageSize,
+  mappedPredictions: ISign[],
+  textPredictions: IOcr,
+  originalImageSize: IImageSize,
 ) => {
   const t1 = performance.now();
 
   let predictedTextToSigns = [...mappedPredictions];
 
   textPredictions?.readResult?.pages[0]?.lines?.forEach(
-    ({ content, boundingBox }: { content: any; boundingBox: any }) => {
+    ({ content, boundingBox }) => {
       const boundingX = boundingBox.filter((_, idx: number) => idx % 2 === 0);
       const boundingY = boundingBox.filter((_, idx: number) => idx % 2 === 1);
 

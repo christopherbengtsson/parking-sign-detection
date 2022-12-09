@@ -1,6 +1,7 @@
 import { Worker } from 'node:worker_threads';
-import path from 'path';
+import path from 'node:path';
 import logger from '../../logger';
+import { IImageSize, ISign } from '../../types';
 
 let worker: Worker;
 
@@ -23,12 +24,21 @@ export const initWorker = () => {
 export const runWorkerTask = (
   image: Express.Multer.File,
   threshold: number,
-) => {
+): Promise<{
+  mappedPredictions: ISign[];
+  originalImageSize: IImageSize;
+}> => {
   return new Promise((resolve, reject) => {
-    worker.once('message', (result) => {
-      logger.info('Predictions received from worker');
-      resolve(result);
-    });
+    worker.once(
+      'message',
+      (result: {
+        mappedPredictions: ISign[];
+        originalImageSize: IImageSize;
+      }) => {
+        logger.info('Predictions received from worker');
+        resolve(result);
+      },
+    );
     worker.on('error', (err) => {
       logger.error('Worker threw an error', err);
       reject(err);

@@ -1,4 +1,6 @@
-export const mockText = {
+import { IOcr } from '../../types';
+
+export const mockedOcrResponse: IOcr = {
   modelVersion: '2022-10-12-preview',
   metadata: {
     width: 960,

@@ -1,4 +1,8 @@
 import logger from '../logger';
 
 export const logPerformance = (t1: number, t2: number, msgSuffix?: string) =>
-  logger.debug(t2 - t1 + ' ms ' + msgSuffix);
+  logger.debug(
+    `Took ${
+      Math.round((t2 - t1 + Number.EPSILON) * 100) / 100
+    } ms ${msgSuffix}`,
+  );
