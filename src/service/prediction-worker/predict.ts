@@ -1,21 +1,27 @@
 import * as tf from '@tensorflow/tfjs-node';
 import { logPerformance } from '../../utils/logPerformanceTime';
 import { postProcessPredictions } from './postprocess';
-import { parentPort } from 'node:worker_threads';
+import { isMainThread, parentPort } from 'node:worker_threads';
 import { loadModel } from '../tensorflow/model';
 import { IImageSize } from '../../types';
 
 let model: tf.GraphModel<string>;
 
-loadModel().then((loadedModel) => {
+export const initModel = async () => {
+  const loadedModel = await loadModel();
   model = loadedModel;
-  parentPort?.postMessage({ loaded: true });
-});
+};
 
-parentPort?.on('message', async ({ image, threshold }) => {
-  const predictions = await predictLocal({ image, threshold });
-  parentPort?.postMessage(predictions);
-});
+if (!isMainThread) {
+  initModel().then(() => {
+    parentPort?.postMessage({ loaded: true });
+  });
+
+  parentPort?.on('message', async ({ image, threshold }) => {
+    const predictions = await predictLocal({ image, threshold });
+    parentPort?.postMessage(predictions);
+  });
+}
 
 const predictLocal = async ({
   image,

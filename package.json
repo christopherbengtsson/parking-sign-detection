@@ -18,7 +18,7 @@
     "test:artillery": "artillery run test/artillery.config.yml"
   },
   "nodemonConfig": {
-    "exec": "NODE_ENV=development node -r esbuild-register",
+    "exec": "NODE_ENV=development ENABLE_WORKER=1 node -r esbuild-register",
     "ext": "js,json,ts"
   },
   "keywords": [],
