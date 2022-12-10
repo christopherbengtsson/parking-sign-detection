@@ -1,5 +1,5 @@
 import { logPerformance } from '../../utils/logPerformanceTime';
-import { getClassLabels } from '../tensorflow/utils';
+import { CLASS_LABELS } from '../tensorflow/utils';
 import { IBoundingBoxes, IImageSize, ISign } from '../../types';
 
 export const postProcessPredictions = (
@@ -8,8 +8,6 @@ export const postProcessPredictions = (
   threshold: number,
 ) => {
   const t1 = performance.now();
-
-  const classLabels = getClassLabels();
 
   const probabilities = predictions[0] as number[];
   const boundingBoxes = predictions[1] as number[][];
@@ -25,7 +23,7 @@ export const postProcessPredictions = (
 
       const { left, top, width, height } = bbox;
       const sign = {
-        label: classLabels[current],
+        label: CLASS_LABELS[current],
         probability: probabilities[index],
         boundingBoxes: {
           left,
