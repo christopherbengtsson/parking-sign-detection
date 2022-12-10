@@ -4,12 +4,12 @@
   "description": "",
   "main": "src/index.ts",
   "scripts": {
-    "start:cluster": "pm2 start ecosystem.config.js --env production",
-    "start:cluster:dev": "pm2-dev start ecosystem.config.js",
+    "start:pm2": "pm2 start ecosystem.config.js",
+    "start:pm2:dev": "pm2-dev start ecosystem.config.js",
     "dev": "nodemon src/index.ts",
     "clear:dist": "rm -rf dist",
     "build": "npm run clear:dist && npm run build:tsc && npm run copy:model",
-    "build:server": "esbuild src/index.ts --bundle --platform=node --outdir=dist --loader:.bin=binary",
+    "build:esbuild": "esbuild src/index.ts --bundle --platform=node --outdir=dist",
     "build:tsc": "tsc",
     "copy:model": "cp -a src/data/. dist/data",
     "lint": "tsc",
@@ -43,8 +43,6 @@
     "esbuild": "^0.15.15",
     "esbuild-node-tsc": "^2.0.4",
     "esbuild-register": "^3.4.1",
-    "mock-aws-s3": "^4.0.2",
-    "nock": "^13.2.9",
     "nodemon": "^2.0.20",
     "typescript": "^4.9.3"
   }

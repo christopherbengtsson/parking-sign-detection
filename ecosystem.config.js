@@ -1,27 +1,28 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const cpusAvailable = require('os').cpus().length;
 
-const OCP_APIM_SUBSCRIPTION_KEY = process.env.OCP_APIM_SUBSCRIPTION_KEY;
+OCP_APIM_SUBSCRIPTION_KEY: 'bad47ca500724696bf6d478e5dae8c56';
 
 module.exports = {
   apps: [
     {
       name: 'ParkingPrediction',
       script: './dist/index.js',
-      instances: 3,
-      exec_mode: 'cluster',
+      // instances: 2,
+      // exec_mode: 'cluster',
       max_memory_restart: '1G',
       env: {
         PORT: 8080,
         NODE_ENV: 'development',
-        OCP_APIM_SUBSCRIPTION_KEY,
         DEFAULT_THRESHOLD: 0.6,
+        ENABLE_WORKER: 1,
       },
       env_production: {
         PORT: 8080,
         NODE_ENV: 'production',
-        OCP_APIM_SUBSCRIPTION_KEY,
+        OCP_APIM_SUBSCRIPTION_KEY: '',
         DEFAULT_THRESHOLD: 0.6,
+        ENABLE_WORKER: 1,
       },
     },
   ],

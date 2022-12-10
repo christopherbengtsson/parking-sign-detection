@@ -8,4 +8,7 @@ coverage
 
 .vscode
 
-data/venv
+src/model/compact_s1/venv
+src/model/compact_s1/tfjs-model-converted
+logs
+notes.md

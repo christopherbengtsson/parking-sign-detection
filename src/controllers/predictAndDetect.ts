@@ -27,10 +27,6 @@ export const predictAndDetect = async (
   if (WORKER_ENABLED) {
     signPredictionPromise = runWorkerTask(image, threshold);
   } else {
-    // const predictionImport = await import(
-    //   '../service/prediction-worker/predict'
-    // );
-    // signPredictionPromise = predictionImport.default({ image, threshold });
     signPredictionPromise = predictLocal({ image, threshold });
   }
 
