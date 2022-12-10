@@ -20,7 +20,7 @@ export const loadModel = async () => {
     const model = await loadGraphModel(modelFilePath);
 
     const t2 = performance.now();
-    logPerformance(t1, t2, 'to run `loadModel()`');
+    logPerformance(t1, t2, 'loadModel()');
 
     await warmpUpModel(model);
 
@@ -42,7 +42,7 @@ const warmpUpModel = async (model: GraphModel<string>) => {
     dispose(testResult);
 
     const t2 = performance.now();
-    logPerformance(t1, t2, 'to run `warmpUpModel()`');
+    logPerformance(t1, t2, 'warmpUpModel()');
   } catch (error) {
     logger.error('Failed to run `warmpUpModel()`!', error);
   }

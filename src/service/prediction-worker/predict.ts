@@ -61,7 +61,7 @@ const predictLocal = async ({
     ])) as tf.Tensor<tf.Rank>[];
     const t2 = performance.now();
 
-    logPerformance(t1, t2, 'to execute model');
+    logPerformance(t1, t2, 'executeAsync()');
   } catch (err) {
     throw err;
   }
@@ -69,7 +69,7 @@ const predictLocal = async ({
   try {
     const predictions = await Promise.all(outputs.map((t) => t.array()));
     const t2 = performance.now();
-    logPerformance(t1, t2, 'to run `predictLocal()`');
+    logPerformance(t1, t2, 'predictLocal()');
 
     const mappedPredictions = postProcessPredictions(
       JSON.parse(JSON.stringify(predictions)) as (number[] | number[][])[],

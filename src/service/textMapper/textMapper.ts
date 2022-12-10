@@ -61,7 +61,7 @@ export const mapTextToSign = (
   );
 
   const t2 = performance.now();
-  logPerformance(t1, t2, 'to run `mapTextToSign()`');
+  logPerformance(t1, t2, 'mapTextToSign()');
 
   return predictedTextToSigns;
 };

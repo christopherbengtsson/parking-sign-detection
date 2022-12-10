@@ -48,7 +48,7 @@ export const postProcessPredictions = (
   }, [] as ISign[]);
 
   const t2 = performance.now();
-  logPerformance(t1, t2, 'to run `postProcessPredictions()`');
+  logPerformance(t1, t2, 'postProcessPredictions()');
 
   return result;
 };
