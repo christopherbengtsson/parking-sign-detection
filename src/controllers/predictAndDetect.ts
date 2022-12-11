@@ -30,7 +30,7 @@ export const predictAndDetect = async (
     signPredictionPromise = predictLocal({ image, threshold });
   }
 
-  const textDetectionPromise = IS_DEV ? mockDetectText() : detectText(image);
+  const textDetectionPromise = !IS_DEV ? mockDetectText() : detectText(image);
 
   Promise.all([signPredictionPromise, textDetectionPromise])
     .then((res) => {

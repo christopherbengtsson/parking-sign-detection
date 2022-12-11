@@ -2,7 +2,7 @@ import * as tf from '@tensorflow/tfjs-node';
 import { logPerformance } from '../../utils/logPerformanceTime';
 import { postProcessPredictions } from './postprocess';
 import { isMainThread, parentPort } from 'node:worker_threads';
-import { loadModel } from '../tensorflow/model';
+import { loadModel } from '../tensorflow-model/model';
 import { IImageSize } from '../../types';
 
 let model: tf.GraphModel<string>;

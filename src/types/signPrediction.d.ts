@@ -1,12 +1,10 @@
-export interface IResult extends ISign {
-  textContent: string[];
-}
+import { ITextContent } from './textDetection';
 
 export interface ISign {
   label: string;
   probability: number;
   boundingBoxes: IBoundingBoxes;
-  nestedSign?: ISign;
+  nestedSigns?: ISign[];
 }
 
 export interface IBoundingBoxes {

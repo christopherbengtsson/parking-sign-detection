@@ -15,7 +15,7 @@ export const loadModel = async () => {
     const t1 = performance.now();
 
     const modelFilePath = io.fileSystem(
-      path.join(__dirname, '../../data/tfjs-model-converted/model.json'),
+      path.join(__dirname, '../../model/compact_s1/tfjs-model-converted/model.json'),
     );
     const model = await loadGraphModel(modelFilePath);
 

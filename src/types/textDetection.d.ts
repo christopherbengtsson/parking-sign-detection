@@ -1,4 +1,4 @@
-import { IImageSize } from './signPrediction';
+import { IBoundingBoxes, IImageSize } from './signPrediction';
 
 export interface IOcr {
   modelVersion: string;
@@ -40,4 +40,10 @@ export interface ILine {
   content: string;
   boundingBox: number[];
   spans: ISpan[];
+}
+
+export interface ITextContent {
+  content: string;
+  textBoundry: number[];
+  normalizedTextBoundry: IBoundingBoxes;
 }

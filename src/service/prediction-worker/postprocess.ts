@@ -1,5 +1,5 @@
 import { logPerformance } from '../../utils/logPerformanceTime';
-import { CLASS_LABELS } from '../tensorflow/utils';
+import { CLASS_LABELS } from '../tensorflow-model/utils';
 import { IBoundingBoxes, IImageSize, ISign } from '../../types';
 
 export const postProcessPredictions = (
@@ -88,10 +88,16 @@ const checkIfSignIsNested = (
         top + height <=
           previousSignBoundingBoxes.top + previousSignBoundingBoxes.height
       ) {
-        signs[index].nestedSign = currentSign;
+        if (Array.isArray(signs[index]?.nestedSigns)) {
+          signs[index].nestedSigns = [
+            ...(signs[index].nestedSigns as ISign[]),
+            currentSign,
+          ];
+        } else {
+          signs[index].nestedSigns = [currentSign];
+        }
 
         currentSignIsNested = true;
-        return false; // Break loop, a sign can (?) only be nested in one sign
       }
       return true;
     });

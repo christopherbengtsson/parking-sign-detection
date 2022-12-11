@@ -1,4 +1,4 @@
-import { IImageSize, IOcr, ISign } from '../../types';
+import { IImageSize, IOcr, ISign, IResult, ITextContent } from '../../types';
 import { logPerformance } from '../../utils/logPerformanceTime';
 
 export const mapTextToSign = (
@@ -27,7 +27,7 @@ export const mapTextToSign = (
       const bboxWidth = maxLeft - minLeft;
       const bboxHeight = maxTop - minTop;
 
-      const getTextContent = (signs: any[]) => {
+      const getTextContent = (signs: IResult[] | ISign[]) => {
         for (let i = 0, len = signs.length; i < len; i++) {
           const signBoundingboxes = signs[i].boundingBoxes;
 
@@ -39,18 +39,29 @@ export const mapTextToSign = (
             bboxTop + bboxHeight <=
               signBoundingboxes.top + signBoundingboxes.height
           ) {
-            if (signs[i].textContent) {
-              signs[i].textContent = [
-                ...signs[i].textContent,
-                content.toLowerCase(),
+            const newTextContent: ITextContent = {
+              content: content.toLowerCase(),
+              textBoundry: boundingBox,
+              normalizedTextBoundry: {
+                left: bboxLeft,
+                top: bboxTop,
+                width: bboxWidth,
+                height: bboxHeight,
+              },
+            };
+
+            if (Array.isArray((signs[i] as IResult).textContent)) {
+              (signs[i] as IResult).textContent = [
+                ...(signs[i] as IResult).textContent,
+                newTextContent,
               ];
             } else {
-              signs[i].textContent = [content.toLowerCase()];
+              (signs[i] as IResult).textContent = [newTextContent];
             }
           }
 
-          if (signs[i].nestedSigns?.length) {
-            signs[i].nestedSigns = getTextContent(signs[i].nestedSigns);
+          if (Array.isArray(signs[i].nestedSigns)) {
+            signs[i].nestedSigns = getTextContent(signs[i].nestedSigns!);
           }
         }
         return signs;
