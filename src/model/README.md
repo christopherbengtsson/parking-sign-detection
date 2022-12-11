@@ -1,4 +1,4 @@
-`/tfjs-model-converted-example` just contains an example model, trained with 15 images with only one tag - "sign". You might need to manually download the bin files.
+`/tfjs-model-converted-example` just contains an example model, quick-trained once with 15 images and only one tag - "sign". You might need to manually download the bin files to get it working properly.
 ![exmaple-model](./compact_s1/tfjs-model-converted-example/image.png 'Example Model')
 
 Both the example model and the main model are trained with Microsoft Custom Vision, where they're exported as a `SavedModel`. At the moment (10-12-2022) Custom Vision export the TensoflowJS models as an older version whtch requires a long running postprocess after predictions, so they are manually converted with the following command:

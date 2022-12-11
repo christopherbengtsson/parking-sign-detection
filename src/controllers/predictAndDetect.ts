@@ -15,7 +15,8 @@ export const predictAndDetect = async (
   const image = request.file as Express.Multer.File;
 
   let threshold = Number(request.body.threshold);
-  if (!Number.isInteger(threshold)) {
+
+  if (Number.isNaN(threshold)) {
     threshold = Number(DEFAULT_THRESHOLD);
   }
 
@@ -30,7 +31,7 @@ export const predictAndDetect = async (
     signPredictionPromise = predictLocal({ image, threshold });
   }
 
-  const textDetectionPromise = !IS_DEV ? mockDetectText() : detectText(image);
+  const textDetectionPromise = IS_DEV ? mockDetectText() : detectText(image);
 
   Promise.all([signPredictionPromise, textDetectionPromise])
     .then((res) => {
@@ -42,6 +43,15 @@ export const predictAndDetect = async (
         textPredictions,
         originalImageSize,
       );
+
+      if (IS_DEV) {
+        response.json({
+          result,
+          sign: res[0].mappedPredictions,
+          text: res[1],
+        });
+        return;
+      }
 
       response.json({
         result,

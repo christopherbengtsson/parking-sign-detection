@@ -55,9 +55,9 @@ const predictLocal = async ({
   try {
     const t1 = performance.now();
     outputs = (await model.executeAsync(batchedT4d, [
-      'detected_scores',
-      'detected_boxes',
-      'detected_classes',
+      'detected_boxes:0',
+      'detected_classes:0',
+      'detected_scores:0',
     ])) as tf.Tensor<tf.Rank>[];
     const t2 = performance.now();
 

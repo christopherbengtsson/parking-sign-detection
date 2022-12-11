@@ -9,9 +9,9 @@ export const postProcessPredictions = (
 ) => {
   const t1 = performance.now();
 
-  const probabilities = predictions[0] as number[];
-  const boundingBoxes = predictions[1] as number[][];
-  const classIds = predictions[2] as number[];
+  const boundingBoxes = predictions[0] as number[][];
+  const classIds = predictions[1] as number[];
+  const probabilities = predictions[2] as number[];
 
   const result = classIds.reduce((previous, current, index) => {
     if (probabilities[index] >= threshold) {

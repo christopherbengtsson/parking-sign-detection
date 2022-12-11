@@ -10,5 +10,6 @@ coverage
 
 src/model/compact_s1/venv
 src/model/compact_s1/tfjs-model-converted
+src/model/compact_s1/tfjs-model-converted_*
 logs
 notes.md
