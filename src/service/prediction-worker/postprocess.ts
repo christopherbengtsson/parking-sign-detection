@@ -48,7 +48,7 @@ export const postProcessPredictions = (
   const t2 = performance.now();
   logPerformance(t1, t2, 'postProcessPredictions()');
 
-  return result;
+  return result.sort((a, b) => a.boundingBoxes.top - b.boundingBoxes.top);
 };
 
 const normalizeBoundingBoxes = (
