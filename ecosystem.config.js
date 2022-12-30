@@ -1,8 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const cpusAvailable = require('os').cpus().length;
 
-OCP_APIM_SUBSCRIPTION_KEY: 'bad47ca500724696bf6d478e5dae8c56';
-
 module.exports = {
   apps: [
     {

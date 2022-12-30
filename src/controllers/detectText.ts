@@ -5,7 +5,7 @@ import { logPerformance } from '../utils/logPerformanceTime';
 
 const ocpApimKey = process.env.OCP_APIM_SUBSCRIPTION_KEY;
 const requestUrl =
-  'https://westeurope.api.cognitive.microsoft.com/computervision/imageanalysis:analyze?features=Read&model-version=latest&n&api-version=2022-10-12-preview';
+  'https://westeurope.api.cognitive.microsoft.com/computervision/imageanalysis:analyze?api-version=2022-10-12-preview&features=Read&language=sv';
 
 export const detectText = async (image: Express.Multer.File) => {
   const t1 = performance.now();
