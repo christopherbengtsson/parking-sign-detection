@@ -19,7 +19,10 @@
   },
   "nodemonConfig": {
     "exec": "NODE_ENV=development ENABLE_WORKER=1 node -r esbuild-register",
-    "ext": "js,json,ts"
+    "ext": "js,json,ts",
+    "ignore": [
+      "client/*"
+    ]
   },
   "keywords": [],
   "author": "",
