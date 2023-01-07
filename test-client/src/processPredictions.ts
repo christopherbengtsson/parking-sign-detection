@@ -64,8 +64,8 @@ export const calcStuff = (
 
   mockText?.readResult?.pages[0]?.lines?.forEach(
     ({ content, boundingBox }: { content: any; boundingBox: any }) => {
-      const boundingX = boundingBox.filter((_, idx: number) => idx % 2 === 0);
-      const boundingY = boundingBox.filter((_, idx: number) => idx % 2 === 1);
+      const boundingX = boundingBox.filter((_:any, idx: number) => idx % 2 === 0);
+      const boundingY = boundingBox.filter((_:any, idx: number) => idx % 2 === 1);
 
       const p2 = Math.max(...boundingX);
       const p1 = Math.min(...boundingX);
