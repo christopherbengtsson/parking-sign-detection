@@ -188,6 +188,41 @@ export const thirty_mins = [
   },
 ];
 
+export const two_hours = [
+  {
+    label: 'p_sign',
+    probability: 0.9971875548362732,
+    boundingBoxes: {
+      left: 193.81339073181152,
+      top: 206.65969848632812,
+      width: 662.0499515533447,
+      height: 685.5604553222656,
+    },
+  },
+  {
+    label: 'sign',
+    probability: 0.9200109839439392,
+    boundingBoxes: {
+      left: 209.03271675109863,
+      top: 892.0660400390625,
+      width: 606.8548107147217,
+      height: 240.47042846679688,
+    },
+    textContent: [
+      {
+        content: '2 tim',
+        textBoundry: [282, 952, 741, 968, 735, 1072, 282, 1050],
+        normalizedTextBoundry: {
+          left: 282,
+          top: 952,
+          width: 459,
+          height: 120,
+        },
+      },
+    ],
+  },
+];
+
 export const prohibited_odd = [
   {
     label: 'p_sign',
@@ -223,6 +258,85 @@ export const prohibited_odd = [
     nestedSigns: [
       {
         label: 'prohibited_parking_odd',
+        probability: 0.3946739435195923,
+        boundingBoxes: {
+          left: 187.5287890434265,
+          top: 689.1689777374268,
+          width: 205.0961136817932,
+          height: 194.5120334625244,
+        },
+      },
+    ],
+    textContent: [
+      {
+        content: '0-8',
+        textBoundry: [426, 736, 723, 743, 721, 858, 424, 848],
+        normalizedTextBoundry: {
+          left: 424,
+          top: 736,
+          width: 299,
+          height: 122,
+        },
+      },
+      {
+        content: '(0-8)',
+        textBoundry: [364, 910, 791, 927, 786, 1067, 361, 1049],
+        normalizedTextBoundry: {
+          left: 361,
+          top: 910,
+          width: 430,
+          height: 157,
+        },
+      },
+      {
+        content: '0-8',
+        textBoundry: [427, 1117, 718, 1120, 714, 1243, 427, 1242],
+        normalizedTextBoundry: {
+          left: 427,
+          top: 1117,
+          width: 291,
+          height: 126,
+        },
+      },
+    ],
+  },
+];
+
+export const prohibited_even = [
+  {
+    label: 'p_sign',
+    probability: 0.9872264266014099,
+    boundingBoxes: {
+      left: 152.20685005187988,
+      top: 7.953214645385742,
+      width: 683.563756942749,
+      height: 618.0407524108887,
+    },
+    textContent: [
+      {
+        content: 'p',
+        textBoundry: [242, 73, 690, 71, 684, 438, 282, 545],
+        normalizedTextBoundry: {
+          left: 242,
+          top: 71,
+          width: 448,
+          height: 474,
+        },
+      },
+    ],
+  },
+  {
+    label: 'warning_sign',
+    probability: 0.9687889814376831,
+    boundingBoxes: {
+      left: 147.4203586578369,
+      top: 650.8567810058594,
+      width: 646.4454174041748,
+      height: 687.2705459594727,
+    },
+    nestedSigns: [
+      {
+        label: 'prohibited_parking_even',
         probability: 0.3946739435195923,
         boundingBoxes: {
           left: 187.5287890434265,

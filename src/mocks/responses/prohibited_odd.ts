@@ -1,4 +1,4 @@
-export const response = {
+export const mock = {
   modelVersion: '2022-10-12-preview',
   metadata: {
     width: 1200,

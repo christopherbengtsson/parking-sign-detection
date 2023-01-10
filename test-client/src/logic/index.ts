@@ -3,11 +3,12 @@ import { pSign } from '../rules/pSign';
 import { isWithinTimeRange, timeRangeRegex } from '../rules/timeRange';
 import {
   LIMITATION_KEYS,
-  getFullMatch,
   getMatch,
+  ODD_DATES,
+  EVEN_DATES,
 } from '../utils/constants/index';
 import { getMaxParkingTime } from '../rules/timeLimit';
-import { isBefore } from 'date-fns';
+import { addMinutes, isBefore } from 'date-fns';
 
 interface IRange {
   from: Date | null;
@@ -44,13 +45,16 @@ export function interpretSigns(response: IResult[]) {
       if (sign.label === 'p_sign') {
         parkingResult.isParkingAllowed = true;
         parkingResult.parkingAllowed.from = new Date();
-        parkingResult.parkingAllowed.to = pSign();
+
+        if (data.length === 1) parkingResult.parkingAllowed.to = pSign();
+
         continue;
       }
 
       const signTexts: string[] =
         (sign as IResult).textContent?.map(({ content }) => content) ?? [];
       let hasTimeRange = false;
+      let timeRange;
       let textLimitations: string[] = [];
       let parkingDiskRequired;
 
@@ -58,11 +62,20 @@ export function interpretSigns(response: IResult[]) {
         const maxMinutes = getMaxParkingTime(signText);
         if (maxMinutes !== undefined) {
           signMaxMins = maxMinutes;
+          parkingResult.parkingAllowed.to = addMinutes(new Date(), signMaxMins);
         }
 
         if (LIMITATION_KEYS.some((key) => signText.includes(key))) {
           const match = getMatch(signText, signTexts[+index + 1]);
           if (match) textLimitations.push(match);
+        } else if (
+          sign.nestedSigns?.at(0)?.label === 'prohibited_parking_odd'
+        ) {
+          textLimitations.push(getMatch(ODD_DATES)!);
+        } else if (
+          sign.nestedSigns?.at(0)?.label === 'prohibited_parking_even'
+        ) {
+          textLimitations.push(getMatch(EVEN_DATES)!);
         }
 
         hasTimeRange = !!signText
@@ -75,10 +88,10 @@ export function interpretSigns(response: IResult[]) {
       }
 
       if (hasTimeRange) {
-        var timeRange = isWithinTimeRange({
+        timeRange = isWithinTimeRange({
           signText: signTexts,
           maxMinutes: signMaxMins ?? parkingResult.maxParkingMins,
-          textLimitation: textLimitations[0],
+          textLimitation: textLimitations[0], // index variable from loop?
         });
 
         console.log('timeRange', timeRange);
@@ -151,6 +164,10 @@ function postprocess(parkingResult: IParkingResult) {
     if (isBefore(prohibitedFrom, allowedTo)) {
       parkingResult.parkingAllowed.to = prohibitedFrom;
     }
+  }
+
+  if (isParkingAllowed && allowedFrom && !allowedTo && prohibitedFrom) {
+    parkingResult.parkingAllowed.to = prohibitedFrom;
   }
 
   console.log('postprocessed', parkingResult);

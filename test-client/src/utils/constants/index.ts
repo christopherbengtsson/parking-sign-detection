@@ -1,15 +1,13 @@
-export const ALL = "alla";
-export const ODD = "udda";
-export const EVEN = "jämna";
-export const DATES = "datum";
-export const DAYS = "dagar";
-export const WEEKS = "veckor";
+export const ALL = 'alla';
+export const ODD = 'udda';
+export const EVEN = 'jämna';
+export const DATES = 'datum';
+export const DAYS = 'dagar';
+export const WEEKS = 'veckor';
 
 export const LIMITATION_KEYS = [ALL, ODD, EVEN, DATES, DAYS, WEEKS];
 
 export const ALL_DAYS = `${ALL} ${DAYS}`;
-export const ODD_DAYS = `${ODD} ${DAYS}`;
-export const EVEN_DAYS = `${EVEN} ${DAYS}`;
 
 export const ODD_DATES = `${ODD} ${DATES}`;
 export const EVEN_DATES = `${EVEN} ${DATES}`;
@@ -36,19 +34,19 @@ export const getMatch = (text: string, textAfter?: string) => {
 export const getFullMatch = (text: string) => {
   switch (text) {
     case ALL_DAYS:
-      return "ALL_DAYS";
+      return 'ALL_DAYS';
 
-    case ODD_DAYS:
-      return "ODD_DAYS";
+    case ODD_DATES:
+      return 'ODD_DATES';
 
-    case EVEN_DAYS:
-      return "EVEN_DAYS";
+    case EVEN_DATES:
+      return 'EVEN_DATES';
 
     case ODD_WEEKS:
-      return "ODD_WEEKS";
+      return 'ODD_WEEKS';
 
     case EVEN_WEEKS:
-      return "EVEN_WEEKS";
+      return 'EVEN_WEEKS';
 
     default:
       return null;

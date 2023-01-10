@@ -1,15 +1,16 @@
 import {
   addDays,
   addMinutes,
+  getDate,
   isAfter,
   isBefore,
   isTomorrow,
   isWithinInterval,
   setHours,
   startOfDay,
-} from "date-fns";
-import { DayType } from "../types";
-import { isDayBeforeRedDay, isRedDay } from "../utils";
+} from 'date-fns';
+import { DayType } from '../types';
+import { isDayBeforeRedDay, isRedDay } from '../utils';
 
 /**
  * if no ranges
@@ -41,7 +42,7 @@ interface IRanges {
 }
 
 const setRange = (rangeString: string): IRange | null => {
-  const res = rangeString.replace(/[()]/g, "").split("-");
+  const res = rangeString.replace(/[()]/g, '').split('-');
   const from = res[0]?.trim();
   const to = res[1]?.trim();
   if (
@@ -55,10 +56,10 @@ const setRange = (rangeString: string): IRange | null => {
 
 const setRangesFromSignText = (signText: string[]) =>
   signText.reduce((previous, current) => {
-    if (current.includes("-")) {
+    if (current.includes('-')) {
       let range: IRange | null;
       let dayType: DayType;
-      if (current.startsWith("(") && current.endsWith(")")) {
+      if (current.startsWith('(') && current.endsWith(')')) {
         range = setRange(current);
         dayType = DayType.DAY_BEFORE_RED_DAY;
       } else if (previous.dayBeforeRedDay) {
@@ -92,7 +93,7 @@ const getTomorrow = (date: Date) => startOfDay(addDays(date, 1));
 const getMaxDateTime = (
   currentDate: Date,
   rangeFromDate: Date,
-  maxMinutes: number
+  maxMinutes: number,
 ): Date => {
   if (isAfter(currentDate, rangeFromDate)) {
     return addMinutes(currentDate, maxMinutes);
@@ -112,7 +113,7 @@ export const isWithinTimeRange = ({
   currentDate?: Date;
   offRangeToday?: boolean;
   maxMinutes?: number;
-  textLimitation?: any;
+  textLimitation?: string;
 }): {
   from: Date;
   to: Date;
@@ -123,8 +124,8 @@ export const isWithinTimeRange = ({
 
   if (!Object.values(ranges).length) return null;
 
-  if (textLimitation) {
-    return handleTextLimitation(ranges, textLimitation);
+  if (textLimitation && textLimitation === 'ALL_DAYS') {
+    return handleRangeAllDays(ranges);
   }
 
   const dayType = getCurrentDayType(currentDate);
@@ -153,24 +154,27 @@ export const isWithinTimeRange = ({
 
   if (isWithinRange || isBefore(currentDate, rangeFromDate)) {
     if (maxMinutes && maxMinutes > 0) {
-      let toDateTime = getMaxDateTime(currentDate, rangeFromDate, maxMinutes);
-      if (isAfter(toDateTime, rangeToDate)) {
-        const tomorrowRange = isWithinTimeRange({
-          signText,
-          currentDate: getTomorrow(currentDate),
-          offRangeToday,
-          maxMinutes,
-        });
+      return handleRangeWithMaxMinutes({
+        currentDate,
+        rangeFromDate,
+        rangeToDate,
+        maxMinutes,
+        signText,
+        offRangeToday,
+        isWithinRange,
+      });
+    }
 
-        if (tomorrowRange?.to) toDateTime = tomorrowRange.to;
-      }
-
-      return {
-        from: rangeFromDate,
-        to: toDateTime,
-        inRangeToday: !offRangeToday,
-        currentlyInRange: !offRangeToday && isWithinRange,
-      };
+    if (textLimitation) {
+      return handleRangeWithTextLimitation({
+        currentDate,
+        rangeFromDate,
+        rangeToDate,
+        signText,
+        offRangeToday,
+        isWithinRange,
+        textLimitation,
+      });
     }
 
     return {
@@ -187,17 +191,15 @@ export const isWithinTimeRange = ({
       currentDate: getTomorrow(currentDate),
       offRangeToday: true,
       maxMinutes,
+      textLimitation,
     });
   }
 
   console.warn("This shouldn't happen (?)");
-  throw new Error("isWithinTimeRange()` returning invalid null value");
+  throw new Error('isWithinTimeRange()` returning invalid null value');
 };
 
-function handleTextLimitation(
-  ranges: IRanges,
-  textLimitation: any
-): {
+function handleRangeAllDays(ranges: IRanges): {
   from: Date;
   to: Date;
   inRangeToday: boolean;
@@ -217,44 +219,115 @@ function handleTextLimitation(
     end: rangeToDate,
   });
 
-  const returnResult = () => {
-    if (inRange) {
+  if (inRange) {
+    return {
+      from: rangeFromDate,
+      to: rangeToDate,
+      inRangeToday: true,
+      currentlyInRange: true,
+    };
+  } else if (isTomorrow(from)) {
+    return {
+      from: addDays(rangeFromDate, 1),
+      to: addDays(rangeFromDate, 1),
+      inRangeToday: false,
+      currentlyInRange: false,
+    };
+  } else {
+    return {
+      from: rangeFromDate,
+      to: rangeToDate,
+      inRangeToday: true,
+      currentlyInRange: false,
+    };
+  }
+}
+
+function handleRangeWithMaxMinutes({
+  currentDate,
+  rangeFromDate,
+  rangeToDate,
+  maxMinutes,
+  signText,
+  offRangeToday,
+  isWithinRange,
+}: {
+  currentDate: Date;
+  rangeFromDate: Date;
+  rangeToDate: Date;
+  maxMinutes: number;
+  signText: string[];
+  offRangeToday: boolean;
+  isWithinRange: boolean;
+}) {
+  let toDateTime = getMaxDateTime(currentDate, rangeFromDate, maxMinutes);
+  if (isAfter(toDateTime, rangeToDate)) {
+    const tomorrowRange = isWithinTimeRange({
+      signText,
+      currentDate: getTomorrow(currentDate),
+      offRangeToday,
+      maxMinutes,
+    });
+
+    if (tomorrowRange?.to) toDateTime = tomorrowRange.to;
+  }
+
+  return {
+    from: rangeFromDate,
+    to: toDateTime,
+    inRangeToday: !offRangeToday,
+    currentlyInRange: !offRangeToday && isWithinRange,
+  };
+}
+
+function handleRangeWithTextLimitation({
+  currentDate,
+  rangeFromDate,
+  rangeToDate,
+  signText,
+  offRangeToday,
+  isWithinRange,
+  textLimitation,
+}: {
+  currentDate: Date;
+  rangeFromDate: Date;
+  rangeToDate: Date;
+  signText: string[];
+  offRangeToday: boolean;
+  isWithinRange: boolean;
+  textLimitation: string;
+}) {
+  if (textLimitation === 'ODD_DATES') {
+    if (getDate(rangeFromDate) % 2 !== 0) {
       return {
         from: rangeFromDate,
         to: rangeToDate,
-        inRangeToday: true,
-        currentlyInRange: true,
-      };
-    } else if (isTomorrow(from)) {
-      return {
-        from: addDays(rangeFromDate, 1),
-        to: addDays(rangeFromDate, 1),
-        inRangeToday: false,
-        currentlyInRange: false,
-      };
-    } else {
-      return {
-        from: rangeFromDate,
-        to: rangeToDate,
-        inRangeToday: true,
-        currentlyInRange: false,
+        inRangeToday: !offRangeToday,
+        currentlyInRange: !offRangeToday && isWithinRange,
       };
     }
-  };
 
-  switch (textLimitation) {
-    case "ALL_DAYS":
-      return returnResult();
-    case "ODD_DAYS":
-      return null;
-    case "EVEN_DAYS":
-      return null;
-    case "ODD_WEEKS":
-      return null;
-    case "EVEN_WEEKS":
-      return null;
+    return isWithinTimeRange({
+      signText,
+      currentDate: getTomorrow(currentDate),
+      offRangeToday: true,
+      textLimitation,
+    });
+  } else {
+    if (getDate(rangeFromDate) % 2 === 0) {
+      return {
+        from: rangeFromDate,
+        to: rangeToDate,
+        inRangeToday: !offRangeToday,
+        currentlyInRange: !offRangeToday && isWithinRange,
+      };
+    }
 
-    default:
-      return null;
+    return isWithinTimeRange({
+      signText,
+      currentDate: getTomorrow(currentDate),
+      offRangeToday: true,
+      textLimitation,
+    });
   }
 }
