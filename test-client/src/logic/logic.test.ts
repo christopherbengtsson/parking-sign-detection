@@ -146,158 +146,160 @@ describe('interpret', () => {
     });
   });
 
-  describe('prohibited_odd', () => {
-    it('out of range even day', () => {
-      const date = '2023-01-10';
-      mockDate(`${date} 09:11`);
-      const {
-        isParkingAllowed,
-        maxParkingMins,
-        parkingAllowed,
-        parkingDiskRequired,
-        parkingProhibited,
-      } = interpretSigns(prohibited_odd);
+  describe('date parking', () => {
+    describe('prohibited_odd', () => {
+      it('out of range even day', () => {
+        const date = '2023-01-10';
+        mockDate(`${date} 09:11`);
+        const {
+          isParkingAllowed,
+          maxParkingMins,
+          parkingAllowed,
+          parkingDiskRequired,
+          parkingProhibited,
+        } = interpretSigns(prohibited_odd);
 
-      expect(isParkingAllowed).toBe(true);
-      expect(maxParkingMins).toBe(undefined);
-      expect(parkingAllowed.to).toEqual(new Date('2023-01-11 00:00'));
-      expect(parkingDiskRequired).toBe(false);
-      expect(parkingProhibited.from).toEqual(new Date('2023-01-11 00:00'));
-      expect(parkingProhibited.to).toEqual(new Date('2023-01-11 08:00'));
+        expect(isParkingAllowed).toBe(true);
+        expect(maxParkingMins).toBe(undefined);
+        expect(parkingAllowed.to).toEqual(new Date('2023-01-11 00:00'));
+        expect(parkingDiskRequired).toBe(false);
+        expect(parkingProhibited.from).toEqual(new Date('2023-01-11 00:00'));
+        expect(parkingProhibited.to).toEqual(new Date('2023-01-11 08:00'));
+      });
+
+      it('out of range odd day', () => {
+        const date = '2023-01-11';
+        mockDate(`${date} 09:11`);
+        const {
+          isParkingAllowed,
+          maxParkingMins,
+          parkingAllowed,
+          parkingDiskRequired,
+          parkingProhibited,
+        } = interpretSigns(prohibited_odd);
+
+        expect(isParkingAllowed).toBe(true);
+        expect(maxParkingMins).toBe(undefined);
+        expect(parkingAllowed.to).toEqual(new Date('2023-01-13 00:00'));
+        expect(parkingDiskRequired).toBe(false);
+        expect(parkingProhibited.from).toEqual(new Date('2023-01-13 00:00'));
+        expect(parkingProhibited.to).toEqual(new Date('2023-01-13 08:00'));
+      });
+      it('in range even day', () => {
+        const date = '2023-01-10';
+        mockDate(`${date} 00:11`);
+        const {
+          isParkingAllowed,
+          maxParkingMins,
+          parkingAllowed,
+          parkingDiskRequired,
+          parkingProhibited,
+        } = interpretSigns(prohibited_odd);
+
+        expect(isParkingAllowed).toBe(true);
+        expect(maxParkingMins).toBe(undefined);
+        expect(parkingAllowed.to).toEqual(new Date('2023-01-11 00:00'));
+        expect(parkingDiskRequired).toBe(false);
+        expect(parkingProhibited.from).toEqual(new Date('2023-01-11 00:00'));
+        expect(parkingProhibited.to).toEqual(new Date('2023-01-11 08:00'));
+      });
+
+      it('in range odd day', () => {
+        const date = '2023-01-11';
+        mockDate(`${date} 00:11`);
+        const {
+          isParkingAllowed,
+          maxParkingMins,
+          parkingAllowed,
+          parkingDiskRequired,
+          parkingProhibited,
+        } = interpretSigns(prohibited_odd);
+
+        expect(isParkingAllowed).toBe(false);
+        expect(maxParkingMins).toBe(undefined);
+        expect(parkingAllowed.to).toEqual(null);
+        expect(parkingDiskRequired).toBe(false);
+        expect(parkingProhibited.from).toEqual(new Date('2023-01-11 00:11'));
+        expect(parkingProhibited.to).toEqual(new Date('2023-01-11 08:00'));
+      });
     });
 
-    it('out of range odd day', () => {
-      const date = '2023-01-11';
-      mockDate(`${date} 09:11`);
-      const {
-        isParkingAllowed,
-        maxParkingMins,
-        parkingAllowed,
-        parkingDiskRequired,
-        parkingProhibited,
-      } = interpretSigns(prohibited_odd);
+    describe('prohibited_even', () => {
+      it('out of range odd day', () => {
+        const date = '2023-01-11';
+        mockDate(`${date} 09:11`);
+        const {
+          isParkingAllowed,
+          maxParkingMins,
+          parkingAllowed,
+          parkingDiskRequired,
+          parkingProhibited,
+        } = interpretSigns(prohibited_even);
 
-      expect(isParkingAllowed).toBe(true);
-      expect(maxParkingMins).toBe(undefined);
-      expect(parkingAllowed.to).toEqual(new Date('2023-01-13 00:00'));
-      expect(parkingDiskRequired).toBe(false);
-      expect(parkingProhibited.from).toEqual(new Date('2023-01-13 00:00'));
-      expect(parkingProhibited.to).toEqual(new Date('2023-01-13 08:00'));
-    });
-    it('in range even day', () => {
-      const date = '2023-01-10';
-      mockDate(`${date} 00:11`);
-      const {
-        isParkingAllowed,
-        maxParkingMins,
-        parkingAllowed,
-        parkingDiskRequired,
-        parkingProhibited,
-      } = interpretSigns(prohibited_odd);
+        expect(isParkingAllowed).toBe(true);
+        expect(maxParkingMins).toBe(undefined);
+        expect(parkingAllowed.to).toEqual(new Date('2023-01-12 00:00'));
+        expect(parkingDiskRequired).toBe(false);
+        expect(parkingProhibited.from).toEqual(new Date('2023-01-12 00:00'));
+        expect(parkingProhibited.to).toEqual(new Date('2023-01-12 08:00'));
+      });
 
-      expect(isParkingAllowed).toBe(true);
-      expect(maxParkingMins).toBe(undefined);
-      expect(parkingAllowed.to).toEqual(new Date('2023-01-11 00:00'));
-      expect(parkingDiskRequired).toBe(false);
-      expect(parkingProhibited.from).toEqual(new Date('2023-01-11 00:00'));
-      expect(parkingProhibited.to).toEqual(new Date('2023-01-11 08:00'));
-    });
+      it('out of range even day', () => {
+        const date = '2023-01-12';
+        mockDate(`${date} 09:11`);
+        const {
+          isParkingAllowed,
+          maxParkingMins,
+          parkingAllowed,
+          parkingDiskRequired,
+          parkingProhibited,
+        } = interpretSigns(prohibited_even);
 
-    it('in range odd day', () => {
-      const date = '2023-01-11';
-      mockDate(`${date} 00:11`);
-      const {
-        isParkingAllowed,
-        maxParkingMins,
-        parkingAllowed,
-        parkingDiskRequired,
-        parkingProhibited,
-      } = interpretSigns(prohibited_odd);
+        expect(isParkingAllowed).toBe(true);
+        expect(maxParkingMins).toBe(undefined);
+        expect(parkingAllowed.to).toEqual(new Date('2023-01-14 00:00'));
+        expect(parkingDiskRequired).toBe(false);
+        expect(parkingProhibited.from).toEqual(new Date('2023-01-14 00:00'));
+        expect(parkingProhibited.to).toEqual(new Date('2023-01-14 08:00'));
+      });
 
-      expect(isParkingAllowed).toBe(false);
-      expect(maxParkingMins).toBe(undefined);
-      expect(parkingAllowed.to).toEqual(null);
-      expect(parkingDiskRequired).toBe(false);
-      expect(parkingProhibited.from).toEqual(new Date('2023-01-11 00:11'));
-      expect(parkingProhibited.to).toEqual(new Date('2023-01-11 08:00'));
-    });
-  });
+      it('in range odd day', () => {
+        const date = '2023-01-11';
+        mockDate(`${date} 00:11`);
+        const {
+          isParkingAllowed,
+          maxParkingMins,
+          parkingAllowed,
+          parkingDiskRequired,
+          parkingProhibited,
+        } = interpretSigns(prohibited_even);
 
-  describe('prohibited_even', () => {
-    it('out of range odd day', () => {
-      const date = '2023-01-11';
-      mockDate(`${date} 09:11`);
-      const {
-        isParkingAllowed,
-        maxParkingMins,
-        parkingAllowed,
-        parkingDiskRequired,
-        parkingProhibited,
-      } = interpretSigns(prohibited_even);
+        expect(isParkingAllowed).toBe(true);
+        expect(maxParkingMins).toBe(undefined);
+        expect(parkingAllowed.to).toEqual(new Date('2023-01-12 00:00'));
+        expect(parkingDiskRequired).toBe(false);
+        expect(parkingProhibited.from).toEqual(new Date('2023-01-12 00:00'));
+        expect(parkingProhibited.to).toEqual(new Date('2023-01-12 08:00'));
+      });
 
-      expect(isParkingAllowed).toBe(true);
-      expect(maxParkingMins).toBe(undefined);
-      expect(parkingAllowed.to).toEqual(new Date('2023-01-12 00:00'));
-      expect(parkingDiskRequired).toBe(false);
-      expect(parkingProhibited.from).toEqual(new Date('2023-01-12 00:00'));
-      expect(parkingProhibited.to).toEqual(new Date('2023-01-12 08:00'));
-    });
+      it('in range even day', () => {
+        const date = '2023-01-12';
+        mockDate(`${date} 00:11`);
+        const {
+          isParkingAllowed,
+          maxParkingMins,
+          parkingAllowed,
+          parkingDiskRequired,
+          parkingProhibited,
+        } = interpretSigns(prohibited_even);
 
-    it('out of range even day', () => {
-      const date = '2023-01-12';
-      mockDate(`${date} 09:11`);
-      const {
-        isParkingAllowed,
-        maxParkingMins,
-        parkingAllowed,
-        parkingDiskRequired,
-        parkingProhibited,
-      } = interpretSigns(prohibited_even);
-
-      expect(isParkingAllowed).toBe(true);
-      expect(maxParkingMins).toBe(undefined);
-      expect(parkingAllowed.to).toEqual(new Date('2023-01-14 00:00'));
-      expect(parkingDiskRequired).toBe(false);
-      expect(parkingProhibited.from).toEqual(new Date('2023-01-14 00:00'));
-      expect(parkingProhibited.to).toEqual(new Date('2023-01-14 08:00'));
-    });
-
-    it('in range odd day', () => {
-      const date = '2023-01-11';
-      mockDate(`${date} 00:11`);
-      const {
-        isParkingAllowed,
-        maxParkingMins,
-        parkingAllowed,
-        parkingDiskRequired,
-        parkingProhibited,
-      } = interpretSigns(prohibited_even);
-
-      expect(isParkingAllowed).toBe(true);
-      expect(maxParkingMins).toBe(undefined);
-      expect(parkingAllowed.to).toEqual(new Date('2023-01-12 00:00'));
-      expect(parkingDiskRequired).toBe(false);
-      expect(parkingProhibited.from).toEqual(new Date('2023-01-12 00:00'));
-      expect(parkingProhibited.to).toEqual(new Date('2023-01-12 08:00'));
-    });
-
-    it('in range even day', () => {
-      const date = '2023-01-12';
-      mockDate(`${date} 00:11`);
-      const {
-        isParkingAllowed,
-        maxParkingMins,
-        parkingAllowed,
-        parkingDiskRequired,
-        parkingProhibited,
-      } = interpretSigns(prohibited_even);
-
-      expect(isParkingAllowed).toBe(false);
-      expect(maxParkingMins).toBe(undefined);
-      expect(parkingAllowed.to).toEqual(null);
-      expect(parkingDiskRequired).toBe(false);
-      expect(parkingProhibited.from).toEqual(new Date('2023-01-12 00:11'));
-      expect(parkingProhibited.to).toEqual(new Date('2023-01-12 08:00'));
+        expect(isParkingAllowed).toBe(false);
+        expect(maxParkingMins).toBe(undefined);
+        expect(parkingAllowed.to).toEqual(null);
+        expect(parkingDiskRequired).toBe(false);
+        expect(parkingProhibited.from).toEqual(new Date('2023-01-12 00:11'));
+        expect(parkingProhibited.to).toEqual(new Date('2023-01-12 08:00'));
+      });
     });
   });
 });

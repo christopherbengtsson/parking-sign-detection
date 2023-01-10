@@ -38,138 +38,129 @@ export function interpretSigns(response: IResult[]) {
     parkingDiskRequired: false,
   };
 
-  const analyseSigns = (data: IResult[] | ISign[]) => {
-    for (const sign of data) {
-      let signMaxMins: number | undefined = undefined;
+  for (const sign of response) {
+    let signMaxMins: number | undefined = undefined;
 
-      if (sign.label === 'p_sign') {
-        parkingResult.isParkingAllowed = true;
-        parkingResult.parkingAllowed.from = new Date();
+    if (sign.label === 'p_sign') {
+      parkingResult.isParkingAllowed = true;
+      parkingResult.parkingAllowed.from = new Date();
 
-        if (data.length === 1) parkingResult.parkingAllowed.to = pSign();
+      if (response.length === 1) parkingResult.parkingAllowed.to = pSign();
 
-        continue;
-      }
-
-      const signTexts: string[] =
-        (sign as IResult).textContent?.map(({ content }) => content) ?? [];
-      let hasTimeRange = false;
-      let timeRange;
-      let textLimitations: string[] = [];
-      let parkingDiskRequired;
-
-      for (const [index, signText] of signTexts.entries()) {
-        const maxMinutes = getMaxParkingTime(signText);
-        if (maxMinutes !== undefined) {
-          signMaxMins = maxMinutes;
-          parkingResult.parkingAllowed.to = addMinutes(new Date(), signMaxMins);
-        }
-
-        if (LIMITATION_KEYS.some((key) => signText.includes(key))) {
-          const match = getMatch(signText, signTexts[+index + 1]);
-          if (match) textLimitations.push(match);
-        } else if (
-          sign.nestedSigns?.at(0)?.label === 'prohibited_parking_odd'
-        ) {
-          textLimitations.push(getMatch(ODD_DATES)!);
-        } else if (
-          sign.nestedSigns?.at(0)?.label === 'prohibited_parking_even'
-        ) {
-          textLimitations.push(getMatch(EVEN_DATES)!);
-        }
-
-        hasTimeRange = !!signText
-          .replace('(', '')
-          .replace(')', '')
-          .match(timeRangeRegex);
-
-        // Get max distance
-        // Get date ranges
-      }
-
-      if (hasTimeRange) {
-        timeRange = isWithinTimeRange({
-          signText: signTexts,
-          maxMinutes: signMaxMins ?? parkingResult.maxParkingMins,
-          textLimitation: textLimitations[0], // index variable from loop?
-        });
-
-        console.log('timeRange', timeRange);
-
-        if (timeRange?.currentlyInRange) {
-          parkingResult.isParkingAllowed = sign.label === 'sign';
-          if (sign.label === 'sign') {
-            parkingResult.parkingAllowed.to = timeRange.to;
-            parkingResult.parkingAllowed.from = new Date();
-          } else if (sign.label === 'warning_sign') {
-            parkingResult.parkingProhibited.to = timeRange.to;
-            parkingResult.parkingProhibited.from = new Date();
-          }
-
-          // If not only ranges on sign, TODO: add more stuffs in if like Avgift etc
-          // if (textLimitations.length) {
-          //   sign.label === "sign"
-          //     ? (parkingAllowed.from = new Date())
-          //     : (parkingProhibited.from = new Date());
-          // }
-        } else {
-          signMaxMins = timeRange?.inRangeToday ? signMaxMins : undefined;
-
-          if (timeRange?.from && timeRange.to) {
-            if (sign.label === 'sign') {
-              parkingResult.parkingAllowed.to = timeRange.to;
-              parkingResult.parkingAllowed.from = timeRange.from;
-            } else if (sign.label === 'warning_sign') {
-              parkingResult.parkingProhibited.to = timeRange.to;
-              parkingResult.parkingProhibited.from = timeRange.from;
-            }
-          }
-        }
-      }
-
-      if (sign.nestedSigns?.length) {
-        if (sign.nestedSigns.at(0)?.label === 'parking_disk') {
-          parkingDiskRequired = timeRange?.inRangeToday ? true : false;
-        }
-      }
-
-      parkingResult.maxParkingMins =
-        signMaxMins ?? parkingResult.maxParkingMins;
-      parkingResult.parkingDiskRequired =
-        parkingDiskRequired ?? parkingResult.parkingDiskRequired;
+      continue;
     }
-  };
 
-  analyseSigns(response);
+    const signTexts: string[] =
+      (sign as IResult).textContent?.map(({ content }) => content) ?? [];
+    let hasTimeRange = false;
+    let timeRange;
+    let textLimitations: string[] = [];
+    let parkingDiskRequired;
+
+    for (const [index, signText] of signTexts.entries()) {
+      const maxMinutes = getMaxParkingTime(signText);
+      if (maxMinutes !== undefined) {
+        signMaxMins = maxMinutes;
+        parkingResult.parkingAllowed.to = addMinutes(new Date(), signMaxMins);
+      }
+
+      if (LIMITATION_KEYS.some((key) => signText.includes(key))) {
+        const match = getMatch(signText, signTexts[+index + 1]);
+        if (match) textLimitations.push(match);
+      } else if (sign.nestedSigns?.at(0)?.label === 'prohibited_parking_odd') {
+        textLimitations.push(getMatch(ODD_DATES)!);
+      } else if (sign.nestedSigns?.at(0)?.label === 'prohibited_parking_even') {
+        textLimitations.push(getMatch(EVEN_DATES)!);
+      }
+
+      hasTimeRange = !!signText
+        .replace('(', '')
+        .replace(')', '')
+        .match(timeRangeRegex);
+
+      // Get max distance
+      // Get date ranges
+    }
+
+    if (hasTimeRange) {
+      timeRange = isWithinTimeRange({
+        signText: signTexts,
+        maxMinutes: signMaxMins ?? parkingResult.maxParkingMins,
+        textLimitation: textLimitations[0], // TODO
+      });
+
+      console.log('timeRange', timeRange);
+
+      if (timeRange?.currentlyInRange) {
+        const { label } = sign;
+        parkingResult.isParkingAllowed = label === 'sign';
+        const targetRange =
+          label === 'sign'
+            ? parkingResult.parkingAllowed
+            : parkingResult.parkingProhibited;
+        targetRange.to = timeRange.to;
+        targetRange.from = new Date();
+
+        // If not only ranges on sign, TODO: add more stuffs in if like Avgift etc
+        // if (textLimitations.length) {
+        //   sign.label === "sign"
+        //     ? (parkingAllowed.from = new Date())
+        //     : (parkingProhibited.from = new Date());
+        // }
+      } else {
+        signMaxMins = timeRange?.inRangeToday ? signMaxMins : undefined;
+
+        if (timeRange?.from && timeRange.to) {
+          const { label } = sign;
+          if (label === 'sign') {
+            parkingResult.parkingAllowed = timeRange;
+          } else if (label === 'warning_sign') {
+            parkingResult.parkingProhibited = timeRange;
+          }
+        }
+      }
+    }
+
+    if (sign.nestedSigns?.length) {
+      if (sign.nestedSigns.at(0)?.label === 'parking_disk') {
+        parkingDiskRequired = timeRange?.inRangeToday ? true : false;
+      }
+    }
+
+    parkingResult.maxParkingMins = signMaxMins ?? parkingResult.maxParkingMins;
+    parkingResult.parkingDiskRequired =
+      parkingDiskRequired ?? parkingResult.parkingDiskRequired;
+  }
 
   console.log('preprocessed', parkingResult);
   return postprocess(parkingResult);
 }
+
 function postprocess(parkingResult: IParkingResult) {
-  // handle when current date is close to some range end date. Lika if parking is not allowed
-  // but only for 2 min left
+  // TODO: Shorten the parking allowed range if parking is not allowed in the near future
+  const { isParkingAllowed, parkingAllowed, parkingProhibited } = parkingResult;
+  if (!isParkingAllowed) return parkingResult;
 
-  const isParkingAllowed = parkingResult.isParkingAllowed;
-  const allowedFrom = parkingResult.parkingAllowed.from;
-  const allowedTo = parkingResult.parkingAllowed.to;
-  const prohibitedFrom = parkingResult.parkingProhibited.from;
+  const { from: allowedFrom, to: allowedTo } = parkingAllowed;
+  const { from: prohibitedFrom } = parkingProhibited;
 
-  if (isParkingAllowed && allowedFrom && allowedTo) {
-    if (isBefore(new Date(), allowedFrom)) {
-      parkingResult.parkingAllowed.from = new Date();
-    }
+  if (!allowedFrom || isBefore(new Date(), allowedFrom)) {
+    parkingAllowed.from = new Date();
   }
 
-  if (isParkingAllowed && prohibitedFrom && allowedTo) {
-    if (isBefore(prohibitedFrom, allowedTo)) {
-      parkingResult.parkingAllowed.to = prohibitedFrom;
-    }
+  if (
+    prohibitedFrom &&
+    allowedFrom &&
+    allowedTo &&
+    isBefore(prohibitedFrom, allowedTo)
+  ) {
+    parkingAllowed.to = prohibitedFrom;
   }
 
-  if (isParkingAllowed && allowedFrom && !allowedTo && prohibitedFrom) {
-    parkingResult.parkingAllowed.to = prohibitedFrom;
+  if (!allowedTo && prohibitedFrom) {
+    parkingAllowed.to = prohibitedFrom;
   }
 
-  console.log('postprocessed', parkingResult);
+  console.log('postprocess', parkingResult);
   return parkingResult;
 }
