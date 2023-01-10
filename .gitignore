@@ -9,7 +9,11 @@ coverage
 .vscode
 
 src/model/compact_s1/venv
+src/model/compact_s1/TensorFlowSavedModel
 src/model/compact_s1/tfjs-model-converted
 src/model/compact_s1/tfjs-model-converted_*
+
+openai/venv
+
 logs
 notes.md
