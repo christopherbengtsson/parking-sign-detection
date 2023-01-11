@@ -5,7 +5,7 @@ import { runWorkerTask } from '../service/prediction-worker';
 import { mapTextToSign } from '../service/textMapper/textMapper';
 import { detectText } from './detectText';
 import logger from '../logger';
-import { IImageSize, ISign } from '../types';
+import { IImageSize, IOcr, ISign } from '../types';
 import predictLocal from '../service/prediction-worker/predict';
 
 export const predictAndDetect = async (
@@ -40,7 +40,7 @@ export const predictAndDetect = async (
 
       const result = mapTextToSign(
         mappedPredictions,
-        textPredictions,
+        textPredictions as IOcr,
         originalImageSize,
       );
 

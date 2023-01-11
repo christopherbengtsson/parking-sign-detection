@@ -12,47 +12,33 @@ export const mapTextToSign = (
 
   textPredictions?.readResult?.pages[0]?.lines?.forEach(
     ({ content, boundingBox }) => {
-      const boundingX = boundingBox.filter((_, idx: number) => idx % 2 === 0);
-      const boundingY = boundingBox.filter((_, idx: number) => idx % 2 === 1);
+      const [x1, y1, x2, y2, x3, y3, x4, y4] = boundingBox;
+      const left = Math.max(x1, x4);
+      const top = Math.max(y1, y2);
+      const width = Math.min(x2, x3) - left;
+      const height = Math.min(y3, y4) - top;
 
-      const maxLeft = Math.max(...boundingX);
-      const minLeft = Math.min(...boundingX);
-      const maxTop = Math.max(...boundingY);
-      const minTop = Math.min(...boundingY);
-
-      const bboxLeft =
-        (minLeft / originalImageSize.width) * originalImageSize.width;
-      const bboxTop =
-        (minTop / originalImageSize.height) * originalImageSize.height;
-      const bboxWidth = maxLeft - minLeft;
-      const bboxHeight = maxTop - minTop;
+      const nestedRect = { left, top, width, height };
 
       const getTextContent = (signs: IResult[] | ISign[]) => {
         for (let i = 0, len = signs.length; i < len; i++) {
           const signBoundingboxes = signs[i].boundingBoxes;
 
           if (
-            signBoundingboxes.left <= bboxLeft &&
-            signBoundingboxes.top <= bboxTop &&
-            bboxLeft + bboxWidth <=
-              signBoundingboxes.left + signBoundingboxes.width &&
-            bboxTop + bboxHeight <=
-              signBoundingboxes.top + signBoundingboxes.height
+            signBoundingboxes.left <= left &&
+            signBoundingboxes.top <= top &&
+            left + width <= signBoundingboxes.left + signBoundingboxes.width &&
+            top + height <= signBoundingboxes.top + signBoundingboxes.height
           ) {
             const newTextContent: ITextContent = {
               content: content.toLowerCase(),
               textBoundry: boundingBox,
-              normalizedTextBoundry: {
-                left: bboxLeft,
-                top: bboxTop,
-                width: bboxWidth,
-                height: bboxHeight,
-              },
+              normalizedTextBoundry: nestedRect,
             };
 
             if (Array.isArray((signs[i] as IResult).textContent)) {
               (signs[i] as IResult).textContent = [
-                ...(signs[i] as IResult).textContent,
+                ...((signs[i] as IResult).textContent ?? []),
                 newTextContent,
               ];
             } else {

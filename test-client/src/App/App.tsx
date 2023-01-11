@@ -1,8 +1,8 @@
-import { FormEvent, useEffect, useRef, useState } from "react";
-import { calcStuff } from "../processPredictions";
-import { readSignData } from "../rules";
-import TimeShift from "timeshift-js";
-import { getTime, setHours } from "date-fns";
+import { FormEvent, useEffect, useRef, useState } from 'react';
+import { calcStuff } from '../processPredictions';
+import { readSignData } from '../rules';
+import TimeShift from 'timeshift-js';
+import { getTime, setHours } from 'date-fns';
 
 // Date = TimeShift.Date;
 
@@ -20,23 +20,23 @@ const drawSignBoundry = (
   }: { left: number; top: number; width: number; height: number },
   label: string,
   probability: number,
-  nestedSigns?: any[]
+  nestedSigns?: any[],
 ) => {
-  ctx.strokeStyle = "green";
+  ctx.strokeStyle = 'green';
   ctx.lineWidth = 4;
 
   ctx.beginPath();
 
-  ctx.fillStyle = "#fff";
-  ctx.font = "bold 16px Arial";
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 16px Arial';
   ctx.fillText(
-    label + " - " + Math.round(parseFloat(`${probability}`) * 100) + "% prob",
+    label + ' - ' + Math.round(parseFloat(`${probability}`) * 100) + '% prob',
     left,
-    top - 10
+    top - 10,
   );
   ctx.fill();
 
-  ctx.fillStyle = "rgba(4,170,109,0.3)";
+  ctx.fillStyle = 'rgba(4,170,109,0.3)';
 
   ctx.rect(left, top, width, height);
   ctx.fill();
@@ -50,7 +50,7 @@ const drawSignBoundry = (
         props.boundingBoxes,
         props.label,
         props.probability,
-        props.nestedSigns
+        props.nestedSigns,
       );
     });
   }
@@ -59,13 +59,14 @@ const drawSignBoundry = (
 const drawTextBoundry = (ctx: any, textContent: any) => {
   textContent?.forEach(({ content, textBoundry, normalizedTextBoundry }) => {
     const { left, top, width, height } = normalizedTextBoundry;
-    ctx.strokeStyle = "yellow";
+
+    ctx.strokeStyle = 'yellow';
     ctx.beginPath();
     ctx.rect(left, top, width, height);
     ctx.stroke();
 
-    ctx.fillStyle = "#fff";
-    ctx.strokeStyle = "red";
+    ctx.fillStyle = '#fff';
+    ctx.strokeStyle = 'red';
     ctx.beginPath();
     ctx.fillText(content, textBoundry[0], textBoundry[1] - 10);
     ctx.moveTo(textBoundry[0], textBoundry[1]);
@@ -81,7 +82,7 @@ const drawBounries = (
   ctx: CanvasRenderingContext2D,
   res: any[],
   width: number,
-  height: number
+  height: number,
 ) => {
   // ctx.clearRect(0, 0, width, height);
   res?.forEach((obj) => {
@@ -90,7 +91,7 @@ const drawBounries = (
       obj.boundingBoxes,
       obj.label,
       obj.probability,
-      obj.nestedSigns
+      obj.nestedSigns,
     );
     drawTextBoundry(ctx, obj.textContent);
   });
@@ -110,7 +111,7 @@ export function App() {
       canvasRef.current.width = image.width;
       canvasRef.current.height = image.height;
 
-      const ctx = canvasRef.current.getContext("2d");
+      const ctx = canvasRef.current.getContext('2d');
       ctx?.drawImage(image, ctxScale, ctxScale);
     }
   };
@@ -129,7 +130,7 @@ export function App() {
 
     if (result && canvasRef?.current && image) {
       setResult(null);
-      const ctx = canvasRef.current.getContext("2d");
+      const ctx = canvasRef.current.getContext('2d');
       ctx?.clearRect(ctxScale, ctxScale, image?.width, image?.height);
       ctx?.drawImage(image, ctxScale, ctxScale);
     }
@@ -137,10 +138,10 @@ export function App() {
     setLoading(true);
     const form = e.currentTarget;
     const formData = new FormData(form);
-    formData.append("threshold", "0.2");
+    formData.append('threshold', '0.2');
 
-    fetch("http://localhost:8080/api/predict-and-ocr", {
-      method: "post",
+    fetch('http://localhost:8080/api/predict-and-ocr', {
+      method: 'post',
       body: formData,
     })
       .then((res) => res.json())
@@ -148,10 +149,10 @@ export function App() {
         setResult(res.result);
         if (canvasRef?.current) {
           drawBounries(
-            canvasRef.current.getContext("2d")!,
+            canvasRef.current.getContext('2d')!,
             res.result,
             image!.width,
-            image!.height
+            image!.height,
           );
           readSignData(res.result);
           // calcStuff(canvasRef.current.getContext("2d")!, image!, res.result);
@@ -203,7 +204,7 @@ export function App() {
       <button onClick={() => setCtxScake((old) => old + 10)}>+</button>
       <canvas
         ref={canvasRef}
-        style={{ maxWidth: "100vw", maxHeight: "95vh" }}
+        style={{ maxWidth: '100vw', maxHeight: '95vh' }}
       />
     </div>
   );
