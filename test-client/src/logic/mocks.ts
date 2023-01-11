@@ -425,3 +425,156 @@ export const prohibited_range = [
     ],
   },
 ];
+
+export const double_time_range = [
+  {
+    label: 'p_sign',
+    probability: 0.8909845352172852,
+    boundingBoxes: {
+      left: 76.26851963996887,
+      top: 47.32781183719635,
+      width: 346.2076463699341,
+      height: 406.5520701110363,
+    },
+    textContent: [
+      {
+        content: 'p',
+        textBoundry: [143, 81, 370, 100, 364, 374, 139, 409],
+        nestedBoundry: {
+          left: 143,
+          top: 100,
+          width: 221,
+          height: 274,
+        },
+      },
+    ],
+  },
+  {
+    label: 'sign',
+    probability: 0.9812540411949158,
+    boundingBoxes: {
+      left: 52.658644795417786,
+      top: 461.58943098783493,
+      width: 401.529074549675,
+      height: 265.0403059720993,
+    },
+    nestedSigns: [
+      {
+        label: 'parking_disk',
+        probability: 0.9724301099777222,
+        boundingBoxes: {
+          left: 88.76633763313293,
+          top: 509.6538876593113,
+          width: 96.77797222137451,
+          height: 170.05577245354652,
+        },
+        textContent: [
+          {
+            content: 'p',
+            textBoundry: [129, 613, 152, 613, 152, 633, 129, 633],
+            nestedBoundry: {
+              left: 129,
+              top: 613,
+              width: 23,
+              height: 20,
+            },
+          },
+        ],
+      },
+    ],
+    textContent: [
+      {
+        content: '1 tim',
+        textBoundry: [232, 496, 362, 497, 360, 552, 232, 551],
+        nestedBoundry: {
+          left: 232,
+          top: 497,
+          width: 128,
+          height: 54,
+        },
+      },
+      {
+        content: '8-22',
+        textBoundry: [215, 566, 377, 570, 377, 623, 215, 621],
+        nestedBoundry: {
+          left: 215,
+          top: 570,
+          width: 162,
+          height: 51,
+        },
+      },
+      {
+        content: 'p',
+        textBoundry: [129, 613, 152, 613, 152, 633, 129, 633],
+        nestedBoundry: {
+          left: 129,
+          top: 613,
+          width: 23,
+          height: 20,
+        },
+      },
+      {
+        content: '(8-22)',
+        textBoundry: [184, 635, 396, 638, 395, 693, 183, 690],
+        nestedBoundry: {
+          left: 184,
+          top: 638,
+          width: 211,
+          height: 52,
+        },
+      },
+    ],
+  },
+  {
+    label: 'sign',
+    probability: 0.998453676700592,
+    boundingBoxes: {
+      left: 53.50818943977356,
+      top: 741.2684156894684,
+      width: 350.1664402484894,
+      height: 357.5953732728958,
+    },
+    textContent: [
+      {
+        content: 'avgift',
+        textBoundry: [138, 767, 341, 765, 342, 839, 139, 845],
+        nestedBoundry: {
+          left: 139,
+          top: 767,
+          width: 202,
+          height: 72,
+        },
+      },
+      {
+        content: '4 tim',
+        textBoundry: [160, 850, 326, 848, 326, 912, 160, 908],
+        nestedBoundry: {
+          left: 160,
+          top: 850,
+          width: 166,
+          height: 58,
+        },
+      },
+      {
+        content: '8-22',
+        textBoundry: [143, 930, 331, 927, 332, 990, 143, 992],
+        nestedBoundry: {
+          left: 143,
+          top: 930,
+          width: 188,
+          height: 60,
+        },
+      },
+      {
+        content: '(8-22)',
+        textBoundry: [119, 1008, 349, 1002, 350, 1069, 121, 1076],
+        nestedBoundry: {
+          left: 121,
+          top: 1008,
+          width: 228,
+          height: 61,
+        },
+      },
+    ],
+  },
+];
