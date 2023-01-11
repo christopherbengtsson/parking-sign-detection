@@ -28,7 +28,7 @@ import { isDayBeforeRedDay, isRedDay } from '../utils';
  * re run function with tomorrow from 00:00
  */
 
-export const timeRangeRegex = /(\d+)-(\d+)/;
+export const timeRangeRegex = /(\d+)\s*-\s*(\d+)/;
 // const timeRangeMatch = timeRangeRegex.exec(text.content);
 
 interface IRange {

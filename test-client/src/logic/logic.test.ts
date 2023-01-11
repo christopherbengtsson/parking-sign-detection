@@ -3,6 +3,7 @@ import { mockDate, describe, it, expect } from '../testUtils';
 import {
   prohibited_even,
   prohibited_odd,
+  prohibited_range,
   pskiva_förbud,
   thirty_mins,
   two_hours,
@@ -299,6 +300,105 @@ describe('interpret', () => {
         expect(parkingDiskRequired).toBe(false);
         expect(parkingProhibited.from).toEqual(new Date('2023-01-12 00:11'));
         expect(parkingProhibited.to).toEqual(new Date('2023-01-12 08:00'));
+      });
+    });
+  });
+
+  describe('prohibited', () => {
+    describe('prohibited range', () => {
+      it('out of range weekday', () => {
+        const date = '2023-01-11';
+        mockDate(`${date} 17:11`);
+        const {
+          isParkingAllowed,
+          maxParkingMins,
+          parkingAllowed,
+          parkingDiskRequired,
+          parkingProhibited,
+        } = interpretSigns(prohibited_range);
+
+        expect(isParkingAllowed).toBe(true);
+        expect(maxParkingMins).toBe(undefined);
+        expect(parkingAllowed.to).toEqual(new Date('2023-01-12 08:00'));
+        expect(parkingDiskRequired).toBe(false);
+        expect(parkingProhibited.from).toEqual(new Date('2023-01-12 08:00'));
+        expect(parkingProhibited.to).toEqual(new Date('2023-01-12 17:00'));
+      });
+
+      it('in range weekday', () => {
+        const date = '2023-01-11';
+        mockDate(`${date} 15:11`);
+        const {
+          isParkingAllowed,
+          maxParkingMins,
+          parkingAllowed,
+          parkingDiskRequired,
+          parkingProhibited,
+        } = interpretSigns(prohibited_range);
+
+        expect(isParkingAllowed).toBe(false);
+        expect(maxParkingMins).toBe(undefined);
+        expect(parkingAllowed.to).toEqual(null);
+        expect(parkingDiskRequired).toBe(false);
+        expect(parkingProhibited.from).toEqual(new Date('2023-01-11 15:11'));
+        expect(parkingProhibited.to).toEqual(new Date('2023-01-11 17:00'));
+      });
+
+      it('off range weekday, next day is saturday', () => {
+        const date = '2023-01-13';
+        mockDate(`${date} 17:11`);
+        const {
+          isParkingAllowed,
+          maxParkingMins,
+          parkingAllowed,
+          parkingDiskRequired,
+          parkingProhibited,
+        } = interpretSigns(prohibited_range);
+
+        expect(isParkingAllowed).toBe(true);
+        expect(maxParkingMins).toBe(undefined);
+        expect(parkingAllowed.to).toEqual(new Date('2023-01-14 09:00'));
+        expect(parkingDiskRequired).toBe(false);
+        expect(parkingProhibited.from).toEqual(new Date('2023-01-14 09:00'));
+        expect(parkingProhibited.to).toEqual(new Date('2023-01-14 18:00'));
+      });
+
+      it('off range saturday', () => {
+        const date = '2023-01-14';
+        mockDate(`${date} 19:11`);
+        const {
+          isParkingAllowed,
+          maxParkingMins,
+          parkingAllowed,
+          parkingDiskRequired,
+          parkingProhibited,
+        } = interpretSigns(prohibited_range);
+
+        expect(isParkingAllowed).toBe(true);
+        expect(maxParkingMins).toBe(undefined);
+        expect(parkingAllowed.to).toEqual(new Date('2023-01-16 08:00'));
+        expect(parkingDiskRequired).toBe(false);
+        expect(parkingProhibited.from).toEqual(new Date('2023-01-16 08:00'));
+        expect(parkingProhibited.to).toEqual(new Date('2023-01-16 17:00'));
+      });
+
+      it('in range saturday', () => {
+        const date = '2023-01-14';
+        mockDate(`${date} 15:11`);
+        const {
+          isParkingAllowed,
+          maxParkingMins,
+          parkingAllowed,
+          parkingDiskRequired,
+          parkingProhibited,
+        } = interpretSigns(prohibited_range);
+
+        expect(isParkingAllowed).toBe(false);
+        expect(maxParkingMins).toBe(undefined);
+        expect(parkingAllowed.to).toEqual(null);
+        expect(parkingDiskRequired).toBe(false);
+        expect(parkingProhibited.from).toEqual(new Date('2023-01-14 15:11'));
+        expect(parkingProhibited.to).toEqual(new Date('2023-01-14 18:00'));
       });
     });
   });

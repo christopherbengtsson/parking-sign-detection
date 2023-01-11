@@ -78,6 +78,8 @@ export function interpretSigns(response: IResult[]) {
         .replace(')', '')
         .match(timeRangeRegex);
 
+      // if (hasTimeRange) signText = signText.replace(/\s/g, '');
+
       // Get max distance
       // Get date ranges
     }
@@ -112,6 +114,7 @@ export function interpretSigns(response: IResult[]) {
 
         if (timeRange?.from && timeRange.to) {
           const { label } = sign;
+          parkingResult.isParkingAllowed = label !== 'sign';
           if (label === 'sign') {
             parkingResult.parkingAllowed = timeRange;
           } else if (label === 'warning_sign') {
@@ -133,6 +136,7 @@ export function interpretSigns(response: IResult[]) {
   }
 
   console.log('preprocessed', parkingResult);
+
   return postprocess(parkingResult);
 }
 

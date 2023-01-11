@@ -380,3 +380,48 @@ export const prohibited_even = [
     ],
   },
 ];
+
+export const prohibited_range = [
+  {
+    label: 'prohibited_parking',
+    probability: 0.9989409446716309,
+    boundingBoxes: {
+      left: 374.9634027481079,
+      top: 152.69165420532227,
+      width: 210.8786106109619,
+      height: 221.51803892850876,
+    },
+  },
+  {
+    label: 'warning_sign',
+    probability: 0.9990993142127991,
+    boundingBoxes: {
+      left: 395.84293961524963,
+      top: 375.4647664427757,
+      width: 163.5366976261139,
+      height: 100.11083149909973,
+    },
+    textContent: [
+      {
+        content: '8 - 17',
+        textBoundry: [433, 390, 527, 389, 528, 420, 433, 421],
+        nestedBoundry: {
+          left: 433,
+          top: 390,
+          width: 94,
+          height: 30,
+        },
+      },
+      {
+        content: '(9 - 18)',
+        textBoundry: [421, 425, 542, 426, 542, 462, 421, 461],
+        nestedBoundry: {
+          left: 421,
+          top: 426,
+          width: 121,
+          height: 35,
+        },
+      },
+    ],
+  },
+];
