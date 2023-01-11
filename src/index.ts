@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import service from './main/service';
 import { DEFAULT_HOST, DEFAULT_PORT, WORKER_ENABLED } from './config';
 import logger from './logger';

@@ -18,7 +18,7 @@ module.exports = {
       env_production: {
         PORT: 8080,
         NODE_ENV: 'production',
-        OCP_APIM_SUBSCRIPTION_KEY: '',
+        OCP_APIM_SUBSCRIPTION_KEY,
         DEFAULT_THRESHOLD: 0.6,
         ENABLE_WORKER: 1,
       },

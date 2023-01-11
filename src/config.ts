@@ -9,4 +9,4 @@ export const DEFAULT_PORT = 8080;
 
 export const CORES = cpus().length / 2;
 
-export const DEFAULT_THRESHOLD = process.env.DEFAULT_THRESHOLD ?? 0.6;
+export const DEFAULT_THRESHOLD = Number(process.env.DEFAULT_THRESHOLD ?? 0.6);
