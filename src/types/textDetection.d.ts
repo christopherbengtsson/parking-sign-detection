@@ -45,5 +45,5 @@ export interface ILine {
 export interface ITextContent {
   content: string;
   textBoundry: number[];
-  normalizedTextBoundry: IBoundingBoxes;
+  nestedBoundry: IBoundingBoxes;
 }

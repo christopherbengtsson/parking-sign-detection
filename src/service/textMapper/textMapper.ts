@@ -33,7 +33,7 @@ export const mapTextToSign = (
             const newTextContent: ITextContent = {
               content: content.toLowerCase(),
               textBoundry: boundingBox,
-              normalizedTextBoundry: nestedRect,
+              nestedBoundry: nestedRect,
             };
 
             if (Array.isArray((signs[i] as IResult).textContent)) {

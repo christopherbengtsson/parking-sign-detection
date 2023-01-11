@@ -12,7 +12,7 @@ export const pskiva_förbud = [
       {
         content: 'p',
         textBoundry: [650, 180, 1046, 207, 1014, 638, 657, 654],
-        normalizedTextBoundry: {
+        nestedBoundry: {
           left: 650,
           top: 180,
           width: 396,
@@ -44,7 +44,7 @@ export const pskiva_förbud = [
           {
             content: 'p',
             textBoundry: [630, 1030, 671, 1029, 672, 1070, 631, 1070],
-            normalizedTextBoundry: {
+            nestedBoundry: {
               left: 630,
               top: 1029,
               width: 42,
@@ -58,7 +58,7 @@ export const pskiva_förbud = [
       {
         content: '1 tim',
         textBoundry: [803, 788, 1089, 787, 1089, 899, 802, 894],
-        normalizedTextBoundry: {
+        nestedBoundry: {
           left: 802,
           top: 787,
           width: 287,
@@ -68,7 +68,7 @@ export const pskiva_förbud = [
       {
         content: '8-18',
         textBoundry: [805, 934, 1073, 931, 1073, 1032, 803, 1032],
-        normalizedTextBoundry: {
+        nestedBoundry: {
           left: 803,
           top: 931,
           width: 270,
@@ -78,7 +78,7 @@ export const pskiva_förbud = [
       {
         content: 'p',
         textBoundry: [630, 1030, 671, 1029, 672, 1070, 631, 1070],
-        normalizedTextBoundry: {
+        nestedBoundry: {
           left: 630,
           top: 1029,
           width: 42,
@@ -88,7 +88,7 @@ export const pskiva_förbud = [
       {
         content: '(8-14)',
         textBoundry: [749, 1072, 1113, 1065, 1115, 1180, 750, 1185],
-        normalizedTextBoundry: {
+        nestedBoundry: {
           left: 749,
           top: 1065,
           width: 366,
@@ -122,7 +122,7 @@ export const pskiva_förbud = [
       {
         content: 'alla',
         textBoundry: [818, 1259, 1068, 1254, 1071, 1362, 820, 1366],
-        normalizedTextBoundry: {
+        nestedBoundry: {
           left: 818,
           top: 1254,
           width: 253,
@@ -132,7 +132,7 @@ export const pskiva_förbud = [
       {
         content: 'dagar',
         textBoundry: [723, 1397, 1104, 1388, 1107, 1510, 725, 1521],
-        normalizedTextBoundry: {
+        nestedBoundry: {
           left: 723,
           top: 1388,
           width: 384,
@@ -142,7 +142,7 @@ export const pskiva_förbud = [
       {
         content: '23-04',
         textBoundry: [667, 1551, 1087, 1530, 1090, 1633, 671, 1654],
-        normalizedTextBoundry: {
+        nestedBoundry: {
           left: 667,
           top: 1530,
           width: 423,
@@ -177,7 +177,7 @@ export const thirty_mins = [
       {
         content: '30 min',
         textBoundry: [282, 952, 741, 968, 735, 1072, 282, 1050],
-        normalizedTextBoundry: {
+        nestedBoundry: {
           left: 282,
           top: 952,
           width: 459,
@@ -212,7 +212,7 @@ export const two_hours = [
       {
         content: '2 tim',
         textBoundry: [282, 952, 741, 968, 735, 1072, 282, 1050],
-        normalizedTextBoundry: {
+        nestedBoundry: {
           left: 282,
           top: 952,
           width: 459,
@@ -237,7 +237,7 @@ export const prohibited_odd = [
       {
         content: 'p',
         textBoundry: [242, 73, 690, 71, 684, 438, 282, 545],
-        normalizedTextBoundry: {
+        nestedBoundry: {
           left: 242,
           top: 71,
           width: 448,
@@ -271,7 +271,7 @@ export const prohibited_odd = [
       {
         content: '0-8',
         textBoundry: [426, 736, 723, 743, 721, 858, 424, 848],
-        normalizedTextBoundry: {
+        nestedBoundry: {
           left: 424,
           top: 736,
           width: 299,
@@ -281,7 +281,7 @@ export const prohibited_odd = [
       {
         content: '(0-8)',
         textBoundry: [364, 910, 791, 927, 786, 1067, 361, 1049],
-        normalizedTextBoundry: {
+        nestedBoundry: {
           left: 361,
           top: 910,
           width: 430,
@@ -291,7 +291,7 @@ export const prohibited_odd = [
       {
         content: '0-8',
         textBoundry: [427, 1117, 718, 1120, 714, 1243, 427, 1242],
-        normalizedTextBoundry: {
+        nestedBoundry: {
           left: 427,
           top: 1117,
           width: 291,
@@ -316,7 +316,7 @@ export const prohibited_even = [
       {
         content: 'p',
         textBoundry: [242, 73, 690, 71, 684, 438, 282, 545],
-        normalizedTextBoundry: {
+        nestedBoundry: {
           left: 242,
           top: 71,
           width: 448,
@@ -350,7 +350,7 @@ export const prohibited_even = [
       {
         content: '0-8',
         textBoundry: [426, 736, 723, 743, 721, 858, 424, 848],
-        normalizedTextBoundry: {
+        nestedBoundry: {
           left: 424,
           top: 736,
           width: 299,
@@ -360,7 +360,7 @@ export const prohibited_even = [
       {
         content: '(0-8)',
         textBoundry: [364, 910, 791, 927, 786, 1067, 361, 1049],
-        normalizedTextBoundry: {
+        nestedBoundry: {
           left: 361,
           top: 910,
           width: 430,
@@ -370,7 +370,7 @@ export const prohibited_even = [
       {
         content: '0-8',
         textBoundry: [427, 1117, 718, 1120, 714, 1243, 427, 1242],
-        normalizedTextBoundry: {
+        nestedBoundry: {
           left: 427,
           top: 1117,
           width: 291,

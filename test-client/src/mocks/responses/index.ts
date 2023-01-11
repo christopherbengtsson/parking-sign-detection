@@ -13,7 +13,7 @@ export const res = {
         {
           content: "p",
           textBoundry: [433, 178, 652, 188, 641, 414, 423, 399],
-          normalizedTextBoundry: {
+          nestedBoundry: {
             left: 423,
             top: 178,
             width: 229,
@@ -35,7 +35,7 @@ export const res = {
         {
           content: "2 tim",
           textBoundry: [430, 469, 638, 477, 636, 538, 427, 529],
-          normalizedTextBoundry: {
+          nestedBoundry: {
             left: 427,
             top: 469,
             width: 211,
@@ -45,7 +45,7 @@ export const res = {
         {
           content: "avgift",
           textBoundry: [412, 547, 652, 557, 649, 636, 409, 626],
-          normalizedTextBoundry: {
+          nestedBoundry: {
             left: 409,
             top: 547,
             width: 243,
@@ -55,7 +55,7 @@ export const res = {
         {
           content: "9-18",
           textBoundry: [430, 638, 630, 646, 627, 712, 427, 703],
-          normalizedTextBoundry: {
+          nestedBoundry: {
             left: 427,
             top: 638,
             width: 203,
@@ -65,7 +65,7 @@ export const res = {
         {
           content: "(9-15)",
           textBoundry: [389, 721, 668, 734, 663, 818, 389, 806],
-          normalizedTextBoundry: {
+          nestedBoundry: {
             left: 389,
             top: 721,
             width: 279,
@@ -91,7 +91,7 @@ const res2 = [
       {
         content: "p",
         textBoundry: [650, 180, 1046, 207, 1014, 638, 657, 654],
-        normalizedTextBoundry: {
+        nestedBoundry: {
           left: 650,
           top: 180,
           width: 396,
@@ -123,7 +123,7 @@ const res2 = [
           {
             content: "p",
             textBoundry: [630, 1030, 671, 1029, 672, 1070, 631, 1070],
-            normalizedTextBoundry: {
+            nestedBoundry: {
               left: 630,
               top: 1029,
               width: 42,
@@ -137,7 +137,7 @@ const res2 = [
       {
         content: "1 tim",
         textBoundry: [803, 788, 1089, 787, 1089, 899, 802, 894],
-        normalizedTextBoundry: {
+        nestedBoundry: {
           left: 802,
           top: 787,
           width: 287,
@@ -147,7 +147,7 @@ const res2 = [
       {
         content: "8-18",
         textBoundry: [805, 934, 1073, 931, 1073, 1032, 803, 1032],
-        normalizedTextBoundry: {
+        nestedBoundry: {
           left: 803,
           top: 931,
           width: 270,
@@ -157,7 +157,7 @@ const res2 = [
       {
         content: "p",
         textBoundry: [630, 1030, 671, 1029, 672, 1070, 631, 1070],
-        normalizedTextBoundry: {
+        nestedBoundry: {
           left: 630,
           top: 1029,
           width: 42,
@@ -167,7 +167,7 @@ const res2 = [
       {
         content: "(8-14)",
         textBoundry: [749, 1072, 1113, 1065, 1115, 1180, 750, 1185],
-        normalizedTextBoundry: {
+        nestedBoundry: {
           left: 749,
           top: 1065,
           width: 366,
@@ -201,7 +201,7 @@ const res2 = [
       {
         content: "alla",
         textBoundry: [818, 1259, 1068, 1254, 1071, 1362, 820, 1366],
-        normalizedTextBoundry: {
+        nestedBoundry: {
           left: 818,
           top: 1254,
           width: 253,
@@ -211,7 +211,7 @@ const res2 = [
       {
         content: "dagar",
         textBoundry: [723, 1397, 1104, 1388, 1107, 1510, 725, 1521],
-        normalizedTextBoundry: {
+        nestedBoundry: {
           left: 723,
           top: 1388,
           width: 384,
@@ -221,7 +221,7 @@ const res2 = [
       {
         content: "23-04",
         textBoundry: [667, 1551, 1087, 1530, 1090, 1633, 671, 1654],
-        normalizedTextBoundry: {
+        nestedBoundry: {
           left: 667,
           top: 1530,
           width: 423,

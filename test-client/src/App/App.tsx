@@ -1,14 +1,6 @@
 import { FormEvent, useEffect, useRef, useState } from 'react';
-import { calcStuff } from '../processPredictions';
+
 import { readSignData } from '../rules';
-import TimeShift from 'timeshift-js';
-import { getTime, setHours } from 'date-fns';
-
-// Date = TimeShift.Date;
-
-// TimeShift.setTime(setHours(new Date(), 23).getTime());
-
-console.log(new Date());
 
 const drawSignBoundry = (
   ctx: any,
@@ -43,7 +35,6 @@ const drawSignBoundry = (
   ctx.stroke();
 
   if (nestedSigns?.length) {
-    console.log(nestedSigns);
     nestedSigns.forEach((props: any) => {
       drawSignBoundry(
         ctx,
@@ -57,8 +48,8 @@ const drawSignBoundry = (
 };
 
 const drawTextBoundry = (ctx: any, textContent: any) => {
-  textContent?.forEach(({ content, textBoundry, normalizedTextBoundry }) => {
-    const { left, top, width, height } = normalizedTextBoundry;
+  textContent?.forEach(({ content, textBoundry, nestedBoundry }) => {
+    const { left, top, width, height } = nestedBoundry;
 
     ctx.strokeStyle = 'yellow';
     ctx.beginPath();
@@ -122,7 +113,6 @@ export function App() {
 
   useEffect(() => {
     draw();
-    console.log(ctxScale);
   }, [ctxScale]);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
