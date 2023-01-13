@@ -9,7 +9,7 @@ import {
 } from 'date-fns';
 
 import { DAYS, PROHIBITED_LABELS, TIME_LIMITS } from '../utils/constants';
-import { validateDay } from '../utils';
+import { validateDay } from '../utils/dayType';
 import { pSign } from './pSign';
 import { isWithinTimeRange } from './timeRange';
 import { handleTimeLimit } from './timeLimit';

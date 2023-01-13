@@ -1,5 +1,5 @@
 import { it, expect, describe, vi } from 'vitest';
-import { isDayBeforeRedDay, isPublicHoliday, isRedDay } from '.';
+import { isDayBeforeRedDay, isPublicHoliday, isRedDay } from './dayType';
 
 describe('Red days', () => {
   it('christmas as holiday', () => {

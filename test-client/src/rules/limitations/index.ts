@@ -6,7 +6,7 @@ import {
   DAYS,
   ALL_DAYS,
   ODD,
-} from "../../utils/constants/index";
+} from "../../utils/constants/limitation";
 
 export const checkLimitation = (textArray: string[]) => {
   const included: string[] = [];

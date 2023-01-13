@@ -10,7 +10,7 @@ import {
   startOfDay,
 } from 'date-fns';
 import { DayType } from '../types';
-import { isDayBeforeRedDay, isRedDay } from '../utils';
+import { isDayBeforeRedDay, isRedDay } from '../utils/dayType';
 
 /**
  * if no ranges

@@ -1,5 +1,5 @@
 import { addDays, addHours, endOfDay, isFriday } from 'date-fns';
-import { isDayBeforeRedDay, isRedDay } from '../utils';
+import { isDayBeforeRedDay, isRedDay } from '../utils/dayType';
 
 export const pSign = () => {
   // monday - thursday
