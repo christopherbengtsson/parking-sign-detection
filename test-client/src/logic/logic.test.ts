@@ -1,6 +1,7 @@
 import { interpretSigns } from '.';
 import { mockDate, describe, it, expect } from '../testUtils';
 import {
+  double_time_range,
   prohibited_even,
   prohibited_odd,
   prohibited_range,
@@ -14,14 +15,13 @@ describe('interpret', () => {
     it('out of range weekday', () => {
       const date = '2023-01-09';
       mockDate(`${date} 19:29`);
+      const { isParkingAllowed, rules } = interpretSigns(pskiva_förbud);
       const {
-        isParkingAllowed,
         maxParkingMins,
         parkingAllowed,
         parkingDiskRequired,
         parkingProhibited,
-      } = interpretSigns(pskiva_förbud);
-
+      } = rules[0];
       expect(isParkingAllowed).toBe(true);
       expect(maxParkingMins).toBe(undefined);
       expect(parkingAllowed.to).toEqual(new Date(`${date} 23:00`));
@@ -33,14 +33,13 @@ describe('interpret', () => {
     it('out of range saturday', () => {
       const date = '2023-01-07';
       mockDate(`${date} 19:00`);
+      const { isParkingAllowed, rules } = interpretSigns(pskiva_förbud);
       const {
-        isParkingAllowed,
         maxParkingMins,
         parkingAllowed,
         parkingDiskRequired,
         parkingProhibited,
-      } = interpretSigns(pskiva_förbud);
-
+      } = rules[0];
       expect(isParkingAllowed).toBe(true);
       expect(maxParkingMins).toBe(undefined);
       expect(parkingAllowed.to).toEqual(new Date(`${date} 23:00`));
@@ -52,14 +51,13 @@ describe('interpret', () => {
     it('in range saturday', () => {
       const date = '2023-01-07';
       mockDate(`${date} 10:00`);
+      const { isParkingAllowed, rules } = interpretSigns(pskiva_förbud);
       const {
-        isParkingAllowed,
         maxParkingMins,
         parkingAllowed,
         parkingDiskRequired,
         parkingProhibited,
-      } = interpretSigns(pskiva_förbud);
-
+      } = rules[0];
       expect(isParkingAllowed).toBe(true);
       expect(maxParkingMins).toBe(60);
       expect(parkingAllowed.to).toEqual(new Date(`${date} 11:00`));
@@ -71,14 +69,13 @@ describe('interpret', () => {
     it('in range today saturday', () => {
       const date = '2023-01-07';
       mockDate(`${date} 06:00`);
+      const { isParkingAllowed, rules } = interpretSigns(pskiva_förbud);
       const {
-        isParkingAllowed,
         maxParkingMins,
         parkingAllowed,
         parkingDiskRequired,
         parkingProhibited,
-      } = interpretSigns(pskiva_förbud);
-
+      } = rules[0];
       expect(isParkingAllowed).toBe(true);
       expect(maxParkingMins).toBe(60);
       expect(parkingAllowed.to).toEqual(new Date(`${date} 09:00`));
@@ -90,14 +87,13 @@ describe('interpret', () => {
     it('in range today saturday', () => {
       const date = '2023-01-08';
       mockDate(`${date} 06:00`);
+      const { isParkingAllowed, rules } = interpretSigns(pskiva_förbud);
       const {
-        isParkingAllowed,
         maxParkingMins,
         parkingAllowed,
         parkingDiskRequired,
         parkingProhibited,
-      } = interpretSigns(pskiva_förbud);
-
+      } = rules[0];
       expect(isParkingAllowed).toBe(true);
       expect(maxParkingMins).toBe(undefined);
       expect(parkingAllowed.to).toEqual(new Date(`${date} 23:00`));
@@ -111,14 +107,13 @@ describe('interpret', () => {
     it('30 mins', () => {
       const date = '2023-01-10';
       mockDate(`${date} 19:29`);
+      const { isParkingAllowed, rules } = interpretSigns(thirty_mins);
       const {
-        isParkingAllowed,
         maxParkingMins,
         parkingAllowed,
         parkingDiskRequired,
         parkingProhibited,
-      } = interpretSigns(thirty_mins);
-
+      } = rules[0];
       expect(isParkingAllowed).toBe(true);
       expect(maxParkingMins).toBe(30);
       expect(parkingAllowed.to).toEqual(new Date(`${date} 19:59`));
@@ -130,14 +125,13 @@ describe('interpret', () => {
     it('2 tim', () => {
       const date = '2023-01-10';
       mockDate(`${date} 19:29`);
+      const { isParkingAllowed, rules } = interpretSigns(two_hours);
       const {
-        isParkingAllowed,
         maxParkingMins,
         parkingAllowed,
         parkingDiskRequired,
         parkingProhibited,
-      } = interpretSigns(two_hours);
-
+      } = rules[0];
       expect(isParkingAllowed).toBe(true);
       expect(maxParkingMins).toBe(120);
       expect(parkingAllowed.to).toEqual(new Date(`${date} 21:29`));
@@ -152,14 +146,13 @@ describe('interpret', () => {
       it('out of range even day', () => {
         const date = '2023-01-10';
         mockDate(`${date} 09:11`);
+        const { isParkingAllowed, rules } = interpretSigns(prohibited_odd);
         const {
-          isParkingAllowed,
           maxParkingMins,
           parkingAllowed,
           parkingDiskRequired,
           parkingProhibited,
-        } = interpretSigns(prohibited_odd);
-
+        } = rules[0];
         expect(isParkingAllowed).toBe(true);
         expect(maxParkingMins).toBe(undefined);
         expect(parkingAllowed.to).toEqual(new Date('2023-01-11 00:00'));
@@ -171,14 +164,13 @@ describe('interpret', () => {
       it('out of range odd day', () => {
         const date = '2023-01-11';
         mockDate(`${date} 09:11`);
+        const { isParkingAllowed, rules } = interpretSigns(prohibited_odd);
         const {
-          isParkingAllowed,
           maxParkingMins,
           parkingAllowed,
           parkingDiskRequired,
           parkingProhibited,
-        } = interpretSigns(prohibited_odd);
-
+        } = rules[0];
         expect(isParkingAllowed).toBe(true);
         expect(maxParkingMins).toBe(undefined);
         expect(parkingAllowed.to).toEqual(new Date('2023-01-13 00:00'));
@@ -189,14 +181,13 @@ describe('interpret', () => {
       it('in range even day', () => {
         const date = '2023-01-10';
         mockDate(`${date} 00:11`);
+        const { isParkingAllowed, rules } = interpretSigns(prohibited_odd);
         const {
-          isParkingAllowed,
           maxParkingMins,
           parkingAllowed,
           parkingDiskRequired,
           parkingProhibited,
-        } = interpretSigns(prohibited_odd);
-
+        } = rules[0];
         expect(isParkingAllowed).toBe(true);
         expect(maxParkingMins).toBe(undefined);
         expect(parkingAllowed.to).toEqual(new Date('2023-01-11 00:00'));
@@ -208,14 +199,13 @@ describe('interpret', () => {
       it('in range odd day', () => {
         const date = '2023-01-11';
         mockDate(`${date} 00:11`);
+        const { isParkingAllowed, rules } = interpretSigns(prohibited_odd);
         const {
-          isParkingAllowed,
           maxParkingMins,
           parkingAllowed,
           parkingDiskRequired,
           parkingProhibited,
-        } = interpretSigns(prohibited_odd);
-
+        } = rules[0];
         expect(isParkingAllowed).toBe(false);
         expect(maxParkingMins).toBe(undefined);
         expect(parkingAllowed.to).toEqual(null);
@@ -229,14 +219,13 @@ describe('interpret', () => {
       it('out of range odd day', () => {
         const date = '2023-01-11';
         mockDate(`${date} 09:11`);
+        const { isParkingAllowed, rules } = interpretSigns(prohibited_even);
         const {
-          isParkingAllowed,
           maxParkingMins,
           parkingAllowed,
           parkingDiskRequired,
           parkingProhibited,
-        } = interpretSigns(prohibited_even);
-
+        } = rules[0];
         expect(isParkingAllowed).toBe(true);
         expect(maxParkingMins).toBe(undefined);
         expect(parkingAllowed.to).toEqual(new Date('2023-01-12 00:00'));
@@ -248,14 +237,13 @@ describe('interpret', () => {
       it('out of range even day', () => {
         const date = '2023-01-12';
         mockDate(`${date} 09:11`);
+        const { isParkingAllowed, rules } = interpretSigns(prohibited_even);
         const {
-          isParkingAllowed,
           maxParkingMins,
           parkingAllowed,
           parkingDiskRequired,
           parkingProhibited,
-        } = interpretSigns(prohibited_even);
-
+        } = rules[0];
         expect(isParkingAllowed).toBe(true);
         expect(maxParkingMins).toBe(undefined);
         expect(parkingAllowed.to).toEqual(new Date('2023-01-14 00:00'));
@@ -267,14 +255,13 @@ describe('interpret', () => {
       it('in range odd day', () => {
         const date = '2023-01-11';
         mockDate(`${date} 00:11`);
+        const { isParkingAllowed, rules } = interpretSigns(prohibited_even);
         const {
-          isParkingAllowed,
           maxParkingMins,
           parkingAllowed,
           parkingDiskRequired,
           parkingProhibited,
-        } = interpretSigns(prohibited_even);
-
+        } = rules[0];
         expect(isParkingAllowed).toBe(true);
         expect(maxParkingMins).toBe(undefined);
         expect(parkingAllowed.to).toEqual(new Date('2023-01-12 00:00'));
@@ -286,14 +273,13 @@ describe('interpret', () => {
       it('in range even day', () => {
         const date = '2023-01-12';
         mockDate(`${date} 00:11`);
+        const { isParkingAllowed, rules } = interpretSigns(prohibited_even);
         const {
-          isParkingAllowed,
           maxParkingMins,
           parkingAllowed,
           parkingDiskRequired,
           parkingProhibited,
-        } = interpretSigns(prohibited_even);
-
+        } = rules[0];
         expect(isParkingAllowed).toBe(false);
         expect(maxParkingMins).toBe(undefined);
         expect(parkingAllowed.to).toEqual(null);
@@ -309,14 +295,13 @@ describe('interpret', () => {
       it('out of range weekday', () => {
         const date = '2023-01-11';
         mockDate(`${date} 17:11`);
+        const { isParkingAllowed, rules } = interpretSigns(prohibited_range);
         const {
-          isParkingAllowed,
           maxParkingMins,
           parkingAllowed,
           parkingDiskRequired,
           parkingProhibited,
-        } = interpretSigns(prohibited_range);
-
+        } = rules[0];
         expect(isParkingAllowed).toBe(true);
         expect(maxParkingMins).toBe(undefined);
         expect(parkingAllowed.to).toEqual(new Date('2023-01-12 08:00'));
@@ -328,14 +313,13 @@ describe('interpret', () => {
       it('in range weekday', () => {
         const date = '2023-01-11';
         mockDate(`${date} 15:11`);
+        const { isParkingAllowed, rules } = interpretSigns(prohibited_range);
         const {
-          isParkingAllowed,
           maxParkingMins,
           parkingAllowed,
           parkingDiskRequired,
           parkingProhibited,
-        } = interpretSigns(prohibited_range);
-
+        } = rules[0];
         expect(isParkingAllowed).toBe(false);
         expect(maxParkingMins).toBe(undefined);
         expect(parkingAllowed.to).toEqual(null);
@@ -347,14 +331,13 @@ describe('interpret', () => {
       it('off range weekday, next day is saturday', () => {
         const date = '2023-01-13';
         mockDate(`${date} 17:11`);
+        const { isParkingAllowed, rules } = interpretSigns(prohibited_range);
         const {
-          isParkingAllowed,
           maxParkingMins,
           parkingAllowed,
           parkingDiskRequired,
           parkingProhibited,
-        } = interpretSigns(prohibited_range);
-
+        } = rules[0];
         expect(isParkingAllowed).toBe(true);
         expect(maxParkingMins).toBe(undefined);
         expect(parkingAllowed.to).toEqual(new Date('2023-01-14 09:00'));
@@ -366,14 +349,13 @@ describe('interpret', () => {
       it('off range saturday', () => {
         const date = '2023-01-14';
         mockDate(`${date} 19:11`);
+        const { isParkingAllowed, rules } = interpretSigns(prohibited_range);
         const {
-          isParkingAllowed,
           maxParkingMins,
           parkingAllowed,
           parkingDiskRequired,
           parkingProhibited,
-        } = interpretSigns(prohibited_range);
-
+        } = rules[0];
         expect(isParkingAllowed).toBe(true);
         expect(maxParkingMins).toBe(undefined);
         expect(parkingAllowed.to).toEqual(new Date('2023-01-16 08:00'));
@@ -385,14 +367,13 @@ describe('interpret', () => {
       it('in range saturday', () => {
         const date = '2023-01-14';
         mockDate(`${date} 15:11`);
+        const { isParkingAllowed, rules } = interpretSigns(prohibited_range);
         const {
-          isParkingAllowed,
           maxParkingMins,
           parkingAllowed,
           parkingDiskRequired,
           parkingProhibited,
-        } = interpretSigns(prohibited_range);
-
+        } = rules[0];
         expect(isParkingAllowed).toBe(false);
         expect(maxParkingMins).toBe(undefined);
         expect(parkingAllowed.to).toEqual(null);
@@ -400,6 +381,25 @@ describe('interpret', () => {
         expect(parkingProhibited.from).toEqual(new Date('2023-01-14 15:11'));
         expect(parkingProhibited.to).toEqual(new Date('2023-01-14 18:00'));
       });
+    });
+  });
+
+  describe.only('two parking rules', () => {
+    it('in range weekday', () => {
+      const date = '2023-01-11';
+      mockDate(`${date} 08:00`);
+      const { isParkingAllowed, rules } = interpretSigns(double_time_range);
+
+      expect(rules.length).toBe(2);
+      expect(isParkingAllowed).toBe(true);
+
+      expect(rules[0].maxParkingMins).toBe(60);
+      expect(rules[0].parkingAllowed.to).toEqual(new Date('2023-01-11 09:00'));
+      expect(rules[0].parkingDiskRequired).toBe(true);
+
+      expect(rules[1].maxParkingMins).toBe(240);
+      expect(rules[1].parkingAllowed.to).toEqual(new Date('2023-01-11 13:00'));
+      expect(rules[1].parkingDiskRequired).toBe(false);
     });
   });
 });
