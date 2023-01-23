@@ -12,6 +12,25 @@ import {
 
 describe('interpret', () => {
   describe('pskiva_förbud', () => {
+      // [
+      //   {
+      //     parkingAllowed: true,
+      //     pDisk: true,
+      //     maxMinutes: 60,
+      //     from: now(),
+      //     to: 18:00,
+      //   },
+      //   {
+      //     parkingAllowed: true,
+      //     from: 18:00,
+      //     to: 23:00,
+      //   },
+      //   {
+      //     parkingAllowed: false,
+      //     from: 23:00,
+      //     to: 04:00,
+      //   }
+      // ]
     it('out of range weekday', () => {
       const date = '2023-01-09';
       mockDate(`${date} 19:29`);
@@ -104,6 +123,14 @@ describe('interpret', () => {
   });
 
   describe('max minutes parking', () => {
+    // [
+    //   {
+    //       parkingAllowed: true,
+    //       maxTime: 30,
+    //       from: now(),
+    //       to: ...
+    //   }
+    // ]
     it('30 mins', () => {
       const date = '2023-01-10';
       mockDate(`${date} 19:29`);
@@ -142,6 +169,18 @@ describe('interpret', () => {
   });
 
   describe('date parking', () => {
+    // [
+    //   {
+    //       parkingAllowed: true,
+    //       from: 08:00,
+    //       to: 00:00,
+    //   },
+    //   {
+    //       parkingAllowed: false,
+    //       from: 00:00,
+    //       to: 08:00,
+    //   },
+    // ]
     describe('prohibited_odd', () => {
       it('out of range even day', () => {
         const date = '2023-01-10';
@@ -385,6 +424,27 @@ describe('interpret', () => {
   });
 
   describe('two parking rules', () => {
+    // [
+    //   {
+    //       parkingAllowed: true,
+    //       pDisk:true,
+    //       maxTime: 60,
+    //       from: now(),
+    //       to: 21:00,
+    //   },
+    //   {
+    //       parkingAllowed: true,
+    //       pDisk: true,
+    //       maxTime: 240,
+    //       from: 21:00,
+    //       to: 22:00
+    //   },
+    //   {
+    //       parkingAllowed: false,
+    //       from: 22:00,
+    //       to: 08:00,
+    //   },
+    // ]
     it('in range weekday', () => {
       const date = '2023-01-11';
       mockDate(`${date} 08:00`);
