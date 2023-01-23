@@ -145,8 +145,8 @@ export function interpretSigns(response: IResult[]) {
     console.log('\n\n');
   }
 
-  console.log('Final result:', parkingResult);
-  console.log(parkingResult.rules.length);
+  console.log('Final result:');
+  console.dir(parkingResult, { depth: null });
   return parkingResult;
 }
 

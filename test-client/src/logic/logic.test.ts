@@ -401,5 +401,22 @@ describe('interpret', () => {
       expect(rules[1].parkingAllowed.to).toEqual(new Date('2023-01-11 13:00'));
       expect(rules[1].parkingDiskRequired).toBe(false);
     });
+
+    it('in range saturday', () => {
+      const date = '2023-01-14';
+      mockDate(`${date} 08:00`);
+      const { isParkingAllowed, rules } = interpretSigns(double_time_range);
+
+      expect(rules.length).toBe(2);
+      expect(isParkingAllowed).toBe(true);
+
+      expect(rules[0].maxParkingMins).toBe(60);
+      expect(rules[0].parkingAllowed.to).toEqual(new Date('2023-01-14 09:00'));
+      expect(rules[0].parkingDiskRequired).toBe(true);
+
+      expect(rules[1].maxParkingMins).toBe(240);
+      expect(rules[1].parkingAllowed.to).toEqual(new Date('2023-01-14 13:00'));
+      expect(rules[1].parkingDiskRequired).toBe(false);
+    });
   });
 });
