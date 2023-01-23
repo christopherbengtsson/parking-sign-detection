@@ -73,7 +73,7 @@ export function interpretSigns(response: IResult[]) {
       setLimitationsFromSignText(
         sign,
         signText,
-        signTexts[+index + 1],
+        signTexts[index + 1],
         textLimitations,
       );
 
