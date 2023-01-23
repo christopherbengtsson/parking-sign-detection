@@ -31,6 +31,11 @@ import { isDayBeforeRedDay, isRedDay } from '../utils/dayType';
 export const timeRangeRegex = /(\d+)\s*-\s*(\d+)/;
 // const timeRangeMatch = timeRangeRegex.exec(text.content);
 
+export interface ITimeRangeMetadata {
+  from: number;
+  to: number;
+  dayType: DayType | 'ALL_DAYS';
+}
 interface IRange {
   from: number;
   to: number;
@@ -119,6 +124,7 @@ export const isWithinTimeRange = ({
   to: Date;
   inRangeToday: boolean;
   currentlyInRange: boolean;
+  timeRange: ITimeRangeMetadata;
 } | null => {
   const ranges = setRangesFromSignText(signText);
 
@@ -140,6 +146,11 @@ export const isWithinTimeRange = ({
   }
 
   const { from: rangeFromHour, to: rangeToHour } = ranges[dayType];
+  const timeRange: ITimeRangeMetadata = {
+    from: rangeFromHour,
+    to: rangeToHour,
+    dayType,
+  };
   const rangeFromDate = setHours(startOfDay(currentDate), rangeFromHour);
   let rangeToDate = setHours(startOfDay(currentDate), rangeToHour);
 
@@ -162,6 +173,7 @@ export const isWithinTimeRange = ({
         signText,
         offRangeToday,
         isWithinRange,
+        timeRange,
       });
     }
 
@@ -174,6 +186,7 @@ export const isWithinTimeRange = ({
         offRangeToday,
         isWithinRange,
         textLimitation,
+        timeRange,
       });
     }
 
@@ -182,6 +195,7 @@ export const isWithinTimeRange = ({
       to: rangeToDate,
       inRangeToday: !offRangeToday,
       currentlyInRange: !offRangeToday && isWithinRange,
+      timeRange,
     };
   }
 
@@ -204,9 +218,11 @@ function handleRangeAllDays(ranges: IRanges): {
   to: Date;
   inRangeToday: boolean;
   currentlyInRange: boolean;
+  timeRange: ITimeRangeMetadata;
 } | null {
   const currentDate = new Date();
   const { from, to } = ranges.weekDay;
+  const timeRange: ITimeRangeMetadata = { from, to, dayType: 'ALL_DAYS' };
   const rangeFromDate = setHours(startOfDay(currentDate), from);
   let rangeToDate = setHours(startOfDay(currentDate), to);
 
@@ -225,6 +241,7 @@ function handleRangeAllDays(ranges: IRanges): {
       to: rangeToDate,
       inRangeToday: true,
       currentlyInRange: true,
+      timeRange,
     };
   } else if (isTomorrow(from)) {
     return {
@@ -232,6 +249,7 @@ function handleRangeAllDays(ranges: IRanges): {
       to: addDays(rangeFromDate, 1),
       inRangeToday: false,
       currentlyInRange: false,
+      timeRange,
     };
   } else {
     return {
@@ -239,6 +257,7 @@ function handleRangeAllDays(ranges: IRanges): {
       to: rangeToDate,
       inRangeToday: true,
       currentlyInRange: false,
+      timeRange,
     };
   }
 }
@@ -251,6 +270,7 @@ function handleRangeWithMaxMinutes({
   signText,
   offRangeToday,
   isWithinRange,
+  timeRange,
 }: {
   currentDate: Date;
   rangeFromDate: Date;
@@ -259,6 +279,7 @@ function handleRangeWithMaxMinutes({
   signText: string[];
   offRangeToday: boolean;
   isWithinRange: boolean;
+  timeRange: ITimeRangeMetadata;
 }) {
   let toDateTime = getMaxDateTime(currentDate, rangeFromDate, maxMinutes);
   if (isAfter(toDateTime, rangeToDate)) {
@@ -277,6 +298,7 @@ function handleRangeWithMaxMinutes({
     to: toDateTime,
     inRangeToday: !offRangeToday,
     currentlyInRange: !offRangeToday && isWithinRange,
+    timeRange,
   };
 }
 
@@ -288,6 +310,7 @@ function handleRangeWithTextLimitation({
   offRangeToday,
   isWithinRange,
   textLimitation,
+  timeRange,
 }: {
   currentDate: Date;
   rangeFromDate: Date;
@@ -296,6 +319,7 @@ function handleRangeWithTextLimitation({
   offRangeToday: boolean;
   isWithinRange: boolean;
   textLimitation: string;
+  timeRange: ITimeRangeMetadata;
 }) {
   if (textLimitation === 'ODD_DATES') {
     if (getDate(rangeFromDate) % 2 !== 0) {
@@ -304,6 +328,7 @@ function handleRangeWithTextLimitation({
         to: rangeToDate,
         inRangeToday: !offRangeToday,
         currentlyInRange: !offRangeToday && isWithinRange,
+        timeRange,
       };
     }
 
@@ -320,6 +345,7 @@ function handleRangeWithTextLimitation({
         to: rangeToDate,
         inRangeToday: !offRangeToday,
         currentlyInRange: !offRangeToday && isWithinRange,
+        timeRange,
       };
     }
 

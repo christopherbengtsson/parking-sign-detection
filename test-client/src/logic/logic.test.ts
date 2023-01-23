@@ -384,7 +384,7 @@ describe('interpret', () => {
     });
   });
 
-  describe.only('two parking rules', () => {
+  describe('two parking rules', () => {
     it('in range weekday', () => {
       const date = '2023-01-11';
       mockDate(`${date} 08:00`);
