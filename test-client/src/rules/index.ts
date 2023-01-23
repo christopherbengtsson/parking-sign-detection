@@ -1,17 +1,19 @@
-import { IResult, ISign } from "../../../src/types";
-import { interpretSigns } from "../logic";
-import { PARKING_DISK } from "../utils/constants";
+import { IResult, ISign } from '../../../src/types';
+// import { interpretSigns } from "../logic";
+import { interpretSigns } from '../logic/twopoimto';
+import { PARKING_DISK } from '../utils/constants';
 
-import { checkLimitation } from "./limitations";
-import { pSign } from "./pSign";
-import { handleTimeLimit } from "./timeLimit";
-import { isWithinTimeRange } from "./timeRange";
-import { validateRules } from "./validateRules";
+import { checkLimitation } from './limitations';
+import { pSign } from './pSign';
+import { handleTimeLimit } from './timeLimit';
+import { isWithinTimeRange } from './timeRange';
+import { validateRules } from './validateRules';
 
 export const readSignData = (signs: IResult[]) => {
   const rules = [];
-  console.log("signs", signs);
+  console.log('signs', signs);
 
+  // return interpretSigns(signs);
   return interpretSigns(signs);
 
   // signs.forEach(
@@ -77,14 +79,14 @@ export const readSignData = (signs: IResult[]) => {
 const checkNestedPSign = (nestedSigns?: ISign[]) => {
   if (!nestedSigns) return false;
 
-  let result = "";
+  let result = '';
   nestedSigns.forEach((sign) => {
-    if (sign.label === "parking_disk") {
-      result = "parking_disk";
+    if (sign.label === 'parking_disk') {
+      result = 'parking_disk';
     }
 
-    if (sign.label === "prohibited_parking") {
-      result = "prohibited_parking";
+    if (sign.label === 'prohibited_parking') {
+      result = 'prohibited_parking';
     }
   });
 
