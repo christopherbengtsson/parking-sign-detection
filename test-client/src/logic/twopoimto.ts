@@ -1,4 +1,5 @@
-import { addMinutes } from 'date-fns';
+import { IFFT } from '@tensorflow/tfjs-node';
+import { addMinutes, isAfter, isBefore, isEqual } from 'date-fns';
 import { IResult } from '../../../src/types';
 import { pSign } from '../rules/pSign';
 import { getMaxParkingTime } from '../rules/timeLimit';
@@ -16,6 +17,7 @@ import {
 
 interface IParkingRule {
   parkingAllowed: boolean;
+  pSign?: true;
   maxParkingMins?: number | undefined;
   parkingDiskRequired?: boolean;
   from?: Date;
@@ -23,7 +25,7 @@ interface IParkingRule {
 }
 
 export function interpretSigns(response: IResult[]) {
-  const parkingResult: IParkingRule[] = [];
+  const parkingRules: IParkingRule[] = [];
 
   for (const sign of response) {
     const rule: IParkingRule = {
@@ -31,10 +33,15 @@ export function interpretSigns(response: IResult[]) {
     };
 
     if (sign.label === 'p_sign') {
-    //   rule.parkingAllowed = true;
-    //   rule.from = new Date();
-    //   rule.to = pSign();
-    //   parkingResult.push(rule);
+      rule.pSign = true;
+      rule.parkingAllowed = true;
+
+      if (response.length === 1) {
+        rule.from = new Date();
+        rule.to = pSign();
+      }
+
+      parkingRules.push(rule);
       continue;
     }
 
@@ -66,11 +73,15 @@ export function interpretSigns(response: IResult[]) {
       setTimeRange(rule, signTexts, textLimitations[0], sign);
     }
 
-    parkingResult.push(rule);
+    checkNestedSigns(sign, rule);
+
+    parkingRules.push(rule);
   }
 
-  console.log(parkingResult);
-  return parkingResult;
+  const parkingRulesWithPSignTimeRange = setPSignTimeRange(parkingRules);
+
+  console.log(parkingRulesWithPSignTimeRange);
+  return parkingRulesWithPSignTimeRange;
 }
 
 const setMaxMinuteParking = (rule: IParkingRule, signText: string) => {
@@ -111,21 +122,10 @@ const setTimeRange = (
     textLimitation, // TODO
   });
 
-  if (timeRange?.currentlyInRange) {
-    const { label } = sign;
-    rule.parkingAllowed = label === 'sign';
+  if (timeRange) {
     rule.to = timeRange.to;
-    rule.from = new Date();
-  } else {
-    if (timeRange?.from && timeRange.to) {
-      const { label } = sign;
-      rule.parkingAllowed = label !== 'sign';
-      rule.to = timeRange.to;
-      rule.from = timeRange.from;
-    }
+    rule.from = timeRange.currentlyInRange ? new Date() : timeRange.from;
   }
-
-  checkNestedSigns(sign, rule);
 };
 
 const checkNestedSigns = (sign: IResult, rule: IParkingRule) => {
@@ -135,3 +135,33 @@ const checkNestedSigns = (sign: IResult, rule: IParkingRule) => {
     }
   }
 };
+
+function setPSignTimeRange(parkingRules: IParkingRule[]) {
+  if (parkingRules[0].pSign) {
+    const now = new Date();
+
+    const anyRuleInRange = parkingRules.some(
+      ({ from }) => from && isEqual(from, now),
+    );
+
+    if (anyRuleInRange) {
+      return parkingRules.filter(({ pSign }) => !pSign);
+    }
+    const closestFrom = parkingRules.reduce((closest, rule) => {
+      if (
+        rule.from &&
+        isAfter(rule.from, now) &&
+        isBefore(rule.from, closest)
+      ) {
+        return rule.from;
+      }
+      return closest;
+    }, now);
+
+    parkingRules[0].to = closestFrom;
+  }
+
+  return parkingRules;
+}
+
+

@@ -440,7 +440,7 @@ describe('interpret', () => {
     //       to: 22:00
     //   },
     //   {
-    //       parkingAllowed: false,
+    //       parkingAllowed: true,
     //       from: 22:00,
     //       to: 08:00,
     //   },

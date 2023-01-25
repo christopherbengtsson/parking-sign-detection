@@ -1,9 +1,9 @@
 import { IOcr } from '../types';
 // import { mockedOcrResponse } from './responses/ocrMockReponse';
 import logger from '../logger';
-import { mock } from './responses/dubbla_time_range';
+// import { mock } from './responses/dubbla_time_range';
 // import { mock } from './responses/förbug_range';
-// import { mock } from './responses/pskiva';
+import { mock } from './responses/pskiva';
 // import { mock } from './responses/30min';
 // import { mock } from './responses/prohibited_odd';
 
